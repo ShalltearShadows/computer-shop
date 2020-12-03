@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qun.mapper.UserMapper">
+
+    <select id="getAll" resultType="User">
+        select * from computermall.user
+    </select>
+
+    <select id="get" resultType="User">
+        select * from computermall.user where id = #{id}
+    </select>
+
+    <insert id="add" parameterType="User">
+        insert into computermall.user(username, password, mobile, address, role, avatar, status)
+            VALUES(#{username},#{password},#{mobile},#{address},#{role},#{avatar},#{status})
+    </insert>
+
+    <delete id="delete">
+        delete from computermall.user where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="User">
+        update computermall.user
+        <set>
+            <if test="username != null">
+                username = #{username}
+            </if>
+            <if test="password != null">
+                password = #{password}
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile}
+            </if>
+            <if test="address != null">
+                address = #{address}
+            </if>
+            <if test="role != null">
+                role = #{role}
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar}
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="checkLogin" resultType="User">
+        select * from user where id = #{id} and password = #{password}
+    </select>
+</mapper>

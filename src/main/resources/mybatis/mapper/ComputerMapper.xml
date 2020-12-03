@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qun.mapper.ComputerMapper">
+
+    <select id="getAll" resultType="Computer">
+        select * from computer
+    </select>
+
+    <select id="get" resultType="Computer">
+        select * from computer where id = #{id}
+    </select>
+
+    <insert id="add" parameterType="Computer">
+        insert into computer(brand, cpu, gpu, screen, memory, hard_disk, price, stock)
+            VALUES(#{brand},#{cpu},#{gpu},#{screen},#{memory},#{hardDisk},#{price},#{stock})
+    </insert>
+
+    <delete id="delete">
+        delete from computer where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="Computer">
+        update computer
+        <set>
+            <if test="brand != null">
+                brand = #{brand}
+            </if>
+            <if test="cpu != null">
+                cpu = #{cpu}
+            </if>
+            <if test="gpu != null">
+                gpu = #{gpu}
+            </if>
+            <if test="screen != null">
+                screen = #{screen}
+            </if>
+            <if test="memory != null">
+                memory = #{memory}
+            </if>
+            <if test="hardDisk != null">
+                hardDisk = #{hardDisk}
+            </if>
+            <if test="price != null">
+                price = #{price}
+            </if>
+            <if test="stock != null">
+                stock = #{stock}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

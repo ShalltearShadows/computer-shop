@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qun.mapper.RoleMapper">
+
+    <select id="getAll" resultType="Role">
+        select * from computermall.role
+    </select>
+
+    <select id="get" resultType="Role">
+        select * from computermall.role where id = #{id}
+    </select>
+
+    <insert id="add" parameterType="Role">
+        insert into computermall.role(name, `right`)
+            VALUES(#{name},#{right})
+    </insert>
+
+    <delete id="delete">
+        delete from computermall.role where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="Role">
+        update computermall.role
+        <set>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="right != null">
+                right = #{right}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>
