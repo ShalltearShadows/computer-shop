@@ -42,7 +42,7 @@ public class JwtUtils {
 
         return Jwts.builder().setHeaderParam("typ","JWT")
                 .setId(id+"")
-                .setSubject(id+"")//设置用户信息
+                .setSubject(id+"")//设置签发人，也就是给谁的
                 .setIssuedAt(nowDate)//签发时间
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS256,secret)//签名：加密算法和私钥信息；防止token被篡改

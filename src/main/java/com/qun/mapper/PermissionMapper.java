@@ -7,8 +7,7 @@
  */
 package com.qun.mapper;
 
-import com.qun.pojo.po.Right;
-import com.qun.pojo.po.Role;
+import com.qun.pojo.po.Permission;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +15,6 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface RightMapper {
-    List<Right> get();
+public interface PermissionMapper {
+    List<Permission> get();
 }

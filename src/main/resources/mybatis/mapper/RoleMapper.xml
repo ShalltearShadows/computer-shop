@@ -5,30 +5,30 @@
 <mapper namespace="com.qun.mapper.RoleMapper">
 
     <select id="getAll" resultType="Role">
-        select * from computermall.role
+        select * from computermall.pe_role
     </select>
 
     <select id="get" resultType="Role">
-        select * from computermall.role where id = #{id}
+        select * from computermall.pe_role where id = #{id}
     </select>
 
     <insert id="add" parameterType="Role">
-        insert into computermall.role(name, `right`)
+        insert into computermall.pe_role(name, perms)
             VALUES(#{name},#{right})
     </insert>
 
     <delete id="delete">
-        delete from computermall.role where id = #{id}
+        delete from computermall.pe_role where id = #{id}
     </delete>
 
     <update id="update" parameterType="Role">
-        update computermall.role
+        update computermall.pe_role
         <set>
             <if test="name != null">
                 name = #{name}
             </if>
-            <if test="right != null">
-                right = #{right}
+            <if test="perms != null">
+                perms = #{perms}
             </if>
         </set>
         where id = #{id}

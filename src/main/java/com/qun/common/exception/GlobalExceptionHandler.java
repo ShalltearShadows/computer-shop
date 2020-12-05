@@ -12,6 +12,10 @@ import com.alibaba.druid.util.StringUtils;
 import com.qun.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
 //import org.apache.shiro.ShiroException;
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.ExpiredCredentialsException;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -25,12 +29,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-//    @ExceptionHandler(value = ShiroException.class)
-//    public Result handler(ShiroException e){
-//        log.error("Shiro异常：-----------{}",e);
-//        return Result.fail(401,e.getMessage(),null);
-//    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = ShiroException.class)
+    public Result handler(ShiroException e){
+        log.error("Shiro异常：-----------{}",e);
+        return Result.fail(401,e.getMessage(),null);
+    }
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -55,10 +59,53 @@ public class GlobalExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = UnauthenticatedException.class)
+    public Result handler(UnauthenticatedException e){
+        log.error("认证异常：-----------{}",e);
+        return Result.fail("请先登录！");
+    }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = UnauthorizedException.class)
+    public Result handler(UnauthorizedException e){
+        log.error("权限异常：-----------{}",e);
+        return Result.fail("没有权限！");
+    }
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = ExpiredCredentialsException.class)
+    public Result handler(ExpiredCredentialsException e){
+        log.error("权限异常：-----------{}",e);
+        return Result.fail(e.getMessage());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = RuntimeException.class)
     public Result handler(RuntimeException e){
         log.error("运行时异常：-----------{}",e);
         return Result.fail(StringUtils.isEmpty(e.getMessage())?"服务器出错":e.getMessage());
     }
+
+
 
 }

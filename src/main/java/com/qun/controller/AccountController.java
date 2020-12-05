@@ -19,6 +19,7 @@ import com.qun.service.UserServiceImpl;
 import com.qun.util.JwtUtils;
 //import org.apache.shiro.SecurityUtils;
 //import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -63,9 +64,8 @@ public class AccountController {
     }
 
     @GetMapping("/logout")
-//    @RequiresAuthentication
     public Result logout(){
-//        SecurityUtils.getSubject().logout();
+        SecurityUtils.getSubject().logout();
         return Result.success(null);
     }
 

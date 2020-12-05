@@ -6,7 +6,13 @@ import Axios from "axios";
 import store from './store'
 
 Vue.config.productionTip = false;
-
+// 导入Element
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+Vue.prototype.$message = ElementUI.Message;// 消息提示
+Vue.prototype.$confirm = ElementUI.MessageBox;// 弹窗提示
+Vue.prototype.$store = store;
 
 //导入请求进度条
 import NProgress from 'nprogress';
@@ -17,9 +23,6 @@ import 'nprogress/nprogress.css';
 // Vue.use(Axios);
 // Axios正确的引用方式
 Vue.prototype.$http = Axios;
-
-
-
 Axios.defaults.baseURL="http://localhost:8080/";
 // 前置拦截===发送请求前
 Axios.interceptors.request.use (config =>{
@@ -44,7 +47,7 @@ Axios.interceptors.response.use (response => {
         return response
     }
 
-    this.$message.error(response.data.msg)
+    ElementUI.Message.error(response.data.msg)
 
     return Promise.reject(response.data.msg)
 
@@ -57,7 +60,7 @@ Axios.interceptors.response.use (response => {
         router.push("/login")
     }
 
-    this.$message.error(error.response.data)
+    ElementUI.Message.error(error.response)
 
     return Promise.reject(error)
 });
@@ -66,12 +69,6 @@ Axios.interceptors.response.use (response => {
 import './assets/fonts/iconfont.css'
 
 
-// 导入Element
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
-Vue.prototype.$message = ElementUI.Message;// 消息提示
-Vue.prototype.$confirm = ElementUI.MessageBox;// 弹窗提示
 
 // 导入树形网格
 import TreeTable from 'vue-table-with-tree-grid'

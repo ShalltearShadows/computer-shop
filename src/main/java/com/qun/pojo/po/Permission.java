@@ -14,8 +14,12 @@ import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
-public class Right implements Serializable {
-    private int id;
+public class Permission implements Serializable {
+    private int permId;
+    private int parentId;
     private String name;
+    private String perm;
+    private String icon;
+    private String level;
 
 }
