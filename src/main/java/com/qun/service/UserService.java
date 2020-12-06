@@ -7,7 +7,7 @@
  */
 package com.qun.service;
 
-import com.qun.pojo.po.User;
+import com.qun.entity.po.User;
 
 import java.util.List;
 

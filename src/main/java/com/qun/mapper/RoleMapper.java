@@ -7,8 +7,7 @@
  */
 package com.qun.mapper;
 
-import com.qun.pojo.po.Role;
-import com.qun.pojo.po.User;
+import com.qun.entity.po.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -18,8 +17,9 @@ import java.util.List;
 @Repository
 public interface RoleMapper {
     List<Role> getAll();
-    Role get(long id);
+    Role getRole(Long id);
+    String getPerms(Long id);
     int add(Role role);
-    int delete(long id);
+    int delete(Long id);
     int update(Role role);
 }

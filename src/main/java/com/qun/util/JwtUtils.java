@@ -59,17 +59,10 @@ public class JwtUtils {
     public Claims getClaimsByToken(String token){
         try {
 
-            Claims claims = Jwts.parser()
+            return Jwts.parser()
                     .setSigningKey(secret)//设置私钥信息
                     .parseClaimsJws(token)
                     .getBody();
-
-            //通过claims解析数据
-            claims.getId();
-            claims.getSubject();
-            String id = (String) claims.get("companyId");
-
-            return claims;
 
         }catch (Exception e){
             log.debug("validate is token error",e);

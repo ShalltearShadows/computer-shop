@@ -17,7 +17,11 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,41 +35,33 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @RequiresAuthentication //访问此方法必须先认证
     @GetMapping("/menu")
     public Result menu(){
-        log.info("=====================menu======================");
-        Long id = ShiroUtil.getProfile().getId();
-
-        Subject subject = SecurityUtils.getSubject();
-
+        System.err.println("=====================menu======================");
+//        Long id = ShiroUtil.getProfile().getId();
+//        Subject subject = SecurityUtils.getSubject();
 
         return Result.success(userService.get(1700701L));
     }
 
 
     @GetMapping("/home")
-    @RequiresRoles("admin") //访问此方法必须拥有的角色
-    @RequiresPermissions("acc") //访问此方法必须具备的权限
-    public Result a(){
+    //@RequiresRoles("admin") //访问此方法必须拥有的角色
+    @RequiresPermissions("不可能会有的权限") //访问此方法必须具备的权限
+    public Result home(){
+        System.err.println("你是超级管理员吗，不然的话，你是不可能会有这个方法的权限的");
         return Result.success("个人主页");
     }
 
-    @GetMapping("/ww")
-    public Result b(){
-        return Result.success("ww");
-    }
 
-    @GetMapping("/un")
-    public Result u(){
-        return Result.fail("无权限");
-    }
+    @GetMapping("/perm")
+    @RequiresPermissions("sys:list:info")
+    public Result perm(){
 
-    @GetMapping("/to")
-    public Result to(){
+        ShiroUtil.clearUserRedisCache();
 
-        return Result.fail("未登录");
+        return Result.success("Permission");
     }
 
 }

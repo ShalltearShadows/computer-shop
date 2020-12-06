@@ -2,9 +2,15 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qun.mapper.RightMapper">
+<mapper namespace="com.qun.mapper.PermissionMapper">
     <select id="getAll" resultType="Permission">
         select * from pe_permission
     </select>
 
+    <select id="get" resultType="Permission">
+        SELECT * FROM pe_permission WHERE perm_id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

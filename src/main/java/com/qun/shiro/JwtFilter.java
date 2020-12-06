@@ -17,6 +17,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,14 +33,14 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends AuthenticatingFilter {
 
-    // JwtUtils使用@Component注解方式注入（需要配置如下代码）
-//    private static JwtFilter obj;
+    //JwtUtils使用@Component注解方式注入（需要配置如下代码）
+    private static JwtFilter obj;
 
-//    @PostConstruct
-//    public void initial(){
-//        obj = this;
-//        obj.jwtUtils = this.jwtUtils;
-//    }
+    @PostConstruct
+    public void initial(){
+        obj = this;
+        obj.jwtUtils = this.jwtUtils;
+    }
 
 
     @Autowired
@@ -47,7 +48,7 @@ public class JwtFilter extends AuthenticatingFilter {
 
 
     @Override
-    protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+    protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse){
 
         HttpServletRequest request = (HttpServletRequest)servletRequest;
 
@@ -64,17 +65,17 @@ public class JwtFilter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
 
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
+        HttpServletRequest request = WebUtils.toHttp(servletRequest);
 
-        String jwt = request.getHeader("Authorization");
+        String token = request.getHeader("Authorization");
 
-        if (jwt!=null){
+        if (StringUtils.isEmpty(token)){
             //放行,交给认证注解拦截
             return true;
         }else {
             //检验jwt
-            Claims claim = jwtUtils.getClaimsByToken(jwt);
-            if (claim ==null || jwtUtils.isTokenExpired(claim.getExpiration())){
+            Claims claim = obj.jwtUtils.getClaimsByToken(token);
+            if (claim==null||obj.jwtUtils.isTokenExpired(claim.getExpiration())){
                 throw new ExpiredCredentialsException("token已失效，请重新登录");
             }
             //执行登录
@@ -107,7 +108,7 @@ public class JwtFilter extends AuthenticatingFilter {
         HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
         httpServletResponse.setHeader("Access-Control-Allow-Origin", httpServletRequest.getHeader("Origin"));
-        httpServletResponse.setHeader("Access-Control-Allow-Methods","GET,POST,OPTIONS, PUT,DELETE");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods","GET,POST,OPTIONS,PUT,DELETE");
         httpServletResponse.setHeader("Access-Control-Allow-Headers" , httpServletRequest.getHeader("Access-Control-Request-Headers"));
         //跨域时会首先发送一个OPTIONS请求，这里我们给OPTIONS请求直接返回正常状态
         if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {

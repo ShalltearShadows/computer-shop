@@ -1,14 +1,6 @@
 server:
   port: 8080
 
-# mybatis
-mybatis:
-  type-aliases-package: com.qun.pojo.po
-  mapper-locations: classpath:mybatis/mapper/*.xml
-  configuration:
-    map-underscore-to-camel-case: true #驼峰命名
-
-
 # spring
 spring:
   application:
@@ -22,6 +14,15 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+
+
+# mybatis
+mybatis:
+  type-aliases-package: com.qun.entity.po
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true #驼峰命名
+
 
 
 lupus:

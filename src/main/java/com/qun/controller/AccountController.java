@@ -8,30 +8,34 @@
 package com.qun.controller;
 
 import cn.hutool.core.map.MapUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qun.common.dto.LoginDto;
 import com.qun.common.lang.Result;
-import com.qun.pojo.po.User;
+import com.qun.entity.po.Permission;
+import com.qun.entity.po.User;
 
+import com.qun.service.PermissionService;
+import com.qun.service.RoleServiceImpl;
+import com.qun.service.UserService;
 import com.qun.service.UserServiceImpl;
 
 import com.qun.util.JwtUtils;
 //import org.apache.shiro.SecurityUtils;
 //import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 public class AccountController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -59,6 +63,7 @@ public class AccountController {
                 .put("username",user.getUsername())
                 .put("avatar",user.getAvatar())
                 .put("address",user.getAddress())
+                .put("role",user.getRole())
                 .map()
         );
     }
@@ -68,5 +73,7 @@ public class AccountController {
         SecurityUtils.getSubject().logout();
         return Result.success(null);
     }
+
+
 
 }

@@ -7,8 +7,9 @@
  */
 package com.qun.mapper;
 
-import com.qun.pojo.po.Permission;
+import com.qun.entity.po.Permission;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,5 +17,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface PermissionMapper {
-    List<Permission> get();
+    List<Permission> getAll();
+
+    List<Permission> get(@Param("ids") String[] ids);
 }

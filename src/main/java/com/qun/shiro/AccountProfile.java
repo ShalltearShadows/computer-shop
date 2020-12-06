@@ -16,5 +16,6 @@ public class AccountProfile implements Serializable {
     private Long id;
     private String username;
     private Long mobile;
+    private Integer role;
     private String address;
 }

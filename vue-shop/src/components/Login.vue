@@ -30,8 +30,8 @@
         data(){
             return {
                 loginForm:{
-                    id:'',
-                    password:''
+                    id:'1700701',
+                    password:'123456'
                 },
                 //验证
                 loginFormRules:{
@@ -60,10 +60,6 @@
 
                     this.$http.post('/login',this.loginForm).then(res=>{
 
-                      if (res.data.code!==200){
-                        return this.$message.error(res.data.msg);
-                      }
-
                       this.$message.success("登陆成功")
                       //将服务器返回的token存储到sessionStorage
                       window.sessionStorage.setItem("token",res.headers.authorization)
@@ -72,7 +68,6 @@
                       this.$store.commit("SET_USERINFO",res.data.data)
 
                       console.log(this.$store.getters.getUser)
-
 
                       // 通过编程式导航跳转到后台主页，路由地址是 /home
                       this.$router.push('/home')

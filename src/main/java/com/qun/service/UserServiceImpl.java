@@ -8,7 +8,7 @@
 package com.qun.service;
 
 import com.qun.mapper.UserMapper;
-import com.qun.pojo.po.User;
+import com.qun.entity.po.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

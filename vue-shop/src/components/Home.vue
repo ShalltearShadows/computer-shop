@@ -83,27 +83,21 @@
             }
         },
         created() {
-            this.getListMenu();
+            // this.getListMenu();
         },
         methods: {
             quit() {
                 //删除token
                 window.sessionStorage.removeItem('token');
+                this.$store.commit("REMOVE_INFO")
                 //跳转到登录页
                 this.$router.push('/login')
             },
             async getListMenu() {
 
-                const {data: res} = await this.$http.get('menu');
+                const {data: res} = await this.$http.get('user/menu');
 
-                console.log(res)
-
-
-                // if (res.meta.status !== 200) {
-                //     return this.$message.error(res.meta.msg)
-                // }
-                //
-                // this.menuList = res.data;
+                this.menuList = res.data;
             },
             //点击按钮
             toggleCollapse(){

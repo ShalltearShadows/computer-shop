@@ -28,10 +28,10 @@ Axios.defaults.baseURL="http://localhost:8080/";
 Axios.interceptors.request.use (config =>{
     //开启进度条
     NProgress.start();
-
-
     //为请求头对象，添加Token验证的Authorization字段
-    config.headers.Authorization = window.sessionStorage.getItem ('token');
+    var token = window.sessionStorage.getItem ('token');
+    config.headers.Authorization = token==null?"":token;
+
     return config
 });
 // 后置拦截=== 获取相应后
@@ -39,8 +39,9 @@ Axios.interceptors.response.use (response => {
     //关闭进度条
     NProgress.done();
 
-    console.log("====================================================")
+    console.log("======================response======================")
     console.log(response.data)
+    console.log(response.config.url)
     console.log("====================================================")
 
     if (response.data.code===200){
@@ -53,14 +54,11 @@ Axios.interceptors.response.use (response => {
 
 },error => {
     // 处理的是全局异常类返回的错误
-    console.log("error"+error)
+    console.log("=====================error======================")
+    console.log(error.response.data.msg)
+    console.log("================================================")
 
-    if (error.response.status === 401){
-        store.commit("REMOVE_INFO")
-        router.push("/login")
-    }
-
-    ElementUI.Message.error(error.response)
+    ElementUI.Message.error(error.response.data.msg)
 
     return Promise.reject(error)
 });
