@@ -20,6 +20,6 @@ public class Permission implements Serializable {
     private String name;
     private String perm;
     private String icon;
-    private String level;
+    private int level;
 
 }

@@ -34,13 +34,13 @@ import java.io.IOException;
 public class JwtFilter extends AuthenticatingFilter {
 
     //JwtUtils使用@Component注解方式注入（需要配置如下代码）
-    private static JwtFilter obj;
-
-    @PostConstruct
-    public void initial(){
-        obj = this;
-        obj.jwtUtils = this.jwtUtils;
-    }
+//    private static JwtFilter obj;
+//
+//    @PostConstruct
+//    public void initial(){
+//        obj = this;
+//        obj.jwtUtils = this.jwtUtils;
+//    }
 
 
     @Autowired
@@ -74,8 +74,9 @@ public class JwtFilter extends AuthenticatingFilter {
             return true;
         }else {
             //检验jwt
-            Claims claim = obj.jwtUtils.getClaimsByToken(token);
-            if (claim==null||obj.jwtUtils.isTokenExpired(claim.getExpiration())){
+            System.out.println(jwtUtils==null?"JwtUtils又在JwtFilter为NULL":"");
+            Claims claim = jwtUtils.getClaimsByToken(token);
+            if (claim==null||jwtUtils.isTokenExpired(claim.getExpiration())){
                 throw new ExpiredCredentialsException("token已失效，请重新登录");
             }
             //执行登录

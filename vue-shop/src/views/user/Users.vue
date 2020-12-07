@@ -27,13 +27,21 @@
             <!-- 用户列表区 border:表格的边框线；stripe：隔行变色 -->
             <el-table :data="userList" border stripe>
                 <el-table-column type="index"></el-table-column>
+                <el-table-column label="账号" prop="id"></el-table-column>
                 <el-table-column label="姓名" prop="username"></el-table-column>
-                <el-table-column label="邮箱" prop="email"></el-table-column>
                 <el-table-column label="电话" prop="mobile"></el-table-column>
-                <el-table-column label="角色" prop="role_name"></el-table-column>
-                <el-table-column label="状态" prop="mg_state">
+                <el-table-column label="角色" prop="role">
+                  <template v-slot="scope">
+                    <p v-if="scope.row.role===1">超级管理员</p>
+                    <p v-else-if="scope.row.role===2">管理员</p>
+                    <p v-else-if="scope.row.role===3">VIP用户</p>
+                    <p v-else>普通用户</p>
+                  </template>
+                </el-table-column>
+                <el-table-column label="地址" prop="address"></el-table-column>
+                <el-table-column label="状态" prop="status">
                     <template v-slot="scope">
-                        <el-switch v-model="scope.row.mg_state" @change="userStateChanged(scope.row)"></el-switch>
+                        <el-switch v-model="scope.row.status===1" @change="userStateChanged(scope.row)"></el-switch>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -230,14 +238,14 @@
         methods: {
             async getUserList() {
 
-                const {data: res} = await this.$http.get('users', {params: this.queryInfo});
+                const {data: res} = await this.$http.get('user/list');
 
-                if (res.meta.status !== 200) {
+                if (res.code !== 200) {
                     return this.$message.error("获取用户列表失败");
                 }
 
-                this.userList = res.data.users;
-                this.total = res.data.total;
+                this.userList = res.data;
+                // this.total = res.data.total;
             },
             //监听page size改变的事件
             handleSizeChange(newSize) {
@@ -251,13 +259,13 @@
             },
             // 监听状态开关的改变
             async userStateChanged(userInfo) {
-                const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
-                if (res.meta.status !== 200) {
-                    userInfo.mg_state = !userInfo.mg_state;
-                    return this.$message.error("更新用户失败");
-                }
-
-                this.$message.success("更新用户状态成功");
+                // const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
+                // if (res.meta.status !== 200) {
+                //     userInfo.mg_state = !userInfo.mg_state;
+                //     return this.$message.error("更新用户失败");
+                // }
+                //
+                // this.$message.success("更新用户状态成功");
             },
             //验证邮箱规则
             checkEmail(rule,value,cb) {

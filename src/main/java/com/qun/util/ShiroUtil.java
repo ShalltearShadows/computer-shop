@@ -37,6 +37,7 @@ public class ShiroUtil {
     }
 
     @Autowired
+    @SuppressWarnings("all")
     private RedisCacheManager cacheManager;
 
     public static AccountProfile getProfile(){

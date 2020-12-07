@@ -25,7 +25,6 @@ public class User implements Serializable {
     private Long mobile;
 
     @NotBlank(message = "地址不能为空")
-    @Email(message = "地址格式不正确")
     private String address;
     private Integer role;
     private String avatar;

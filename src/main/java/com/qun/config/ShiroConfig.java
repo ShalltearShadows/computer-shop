@@ -39,6 +39,7 @@ public class ShiroConfig {
 
 
     @Bean
+    @SuppressWarnings("all")
     public SessionManager sessionManager(RedisSessionDAO redisSessionDAO) {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 

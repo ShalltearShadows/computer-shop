@@ -70,7 +70,6 @@ public class AccountRealm extends AuthorizingRealm {
 
         AccountProfile profile = (AccountProfile) principalCollection.getPrimaryPrincipal();
 
-
         Set<String> roles = new HashSet<>();
         Set<String> perms = new HashSet<>();
 
@@ -104,7 +103,6 @@ public class AccountRealm extends AuthorizingRealm {
 
         JwtToken jwtToken = (JwtToken) token;
 
-
         String id = obj.jwtUtils.getClaimsByToken(jwtToken.getToken()).getSubject();
 
         User user = userService.get(Long.parseLong(id));
@@ -131,13 +129,13 @@ public class AccountRealm extends AuthorizingRealm {
     @Override
     public boolean isPermitted(PrincipalCollection principals, String permission) {
         AccountProfile profile = (AccountProfile) principals.getPrimaryPrincipal();
-        System.err.println("isPermitted"+profile.toString());
+        System.err.println("isPermitted========="+profile.toString());
         return profile.getRole()==1|| super.isPermitted(principals, permission);
     }
     @Override
     public boolean hasRole(PrincipalCollection principals, String roleIdentifier) {
         AccountProfile profile = (AccountProfile) principals.getPrimaryPrincipal();
-        System.err.println("hasRole"+profile.toString());
+        System.err.println("hasRole========"+profile.toString());
         return profile.getRole()==1 || super.hasRole(principals, roleIdentifier);
     }
 }
