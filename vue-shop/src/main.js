@@ -47,10 +47,9 @@ Axios.interceptors.response.use (response => {
     if (response.data.code===200){
         return response
     }
-
-    ElementUI.Message.error(response.data.msg)
-
-    return Promise.reject(response.data.msg)
+    if (!response.data.httpSessions){
+        ElementUI.Message.error("服务器response出错")
+    }
 
 },error => {
     // 处理的是全局异常类返回的错误

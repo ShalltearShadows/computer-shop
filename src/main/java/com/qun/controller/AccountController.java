@@ -8,7 +8,7 @@
 package com.qun.controller;
 
 import cn.hutool.core.map.MapUtil;
-import com.qun.entity.dto.LoginDto;
+import com.qun.entity.dto.LoginDTO;
 import com.qun.common.lang.Result;
 import com.qun.entity.po.User;
 
@@ -36,7 +36,7 @@ public class AccountController {
 
 
     @PostMapping("/login")
-    public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
+    public Result login(@Validated @RequestBody LoginDTO loginDto, HttpServletResponse response) {
 
         User user = userService.get(loginDto.getId());
         Assert.notNull(user,"用户不存在");

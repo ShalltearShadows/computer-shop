@@ -5,48 +5,66 @@
 <mapper namespace="com.qun.mapper.UserMapper">
 
     <select id="getAll" resultType="User">
-        select * from computermall.user
+        select * from user
+        <where>
+            <if test="query != null">
+                id like concat('%',#{query},'%') or
+                username like concat('%',#{query},'%') or
+                mobile like concat('%',#{query},'%') or
+                address like concat('%',#{query},'%')
+            </if>
+        </where>
+        limit #{start},#{num}
+    </select>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from user
     </select>
 
     <select id="get" resultType="User">
-        select * from computermall.user where id = #{id}
+        select * from user where id = #{id}
     </select>
 
-    <insert id="add" parameterType="User">
-        insert into computermall.user(username, password, mobile, address, role, avatar, status)
-            VALUES(#{username},#{password},#{mobile},#{address},#{role},#{avatar},#{status})
+    <insert id="add" parameterType="UserDTO">
+        insert into user(username, password, mobile, address)
+            VALUES(#{username},#{password},#{mobile},#{address})
     </insert>
 
     <delete id="delete">
-        delete from computermall.user where id = #{id}
+        delete from user where id = #{id}
     </delete>
 
     <update id="update" parameterType="User">
-        update computermall.user
+        update user
         <set>
             <if test="username != null">
-                username = #{username}
+                username = #{username},
             </if>
             <if test="password != null">
-                password = #{password}
+                password = #{password},
             </if>
             <if test="mobile != null">
-                mobile = #{mobile}
+                mobile = #{mobile},
             </if>
             <if test="address != null">
-                address = #{address}
+                address = #{address},
             </if>
             <if test="role != null">
-                role = #{role}
+                role = #{role},
             </if>
             <if test="avatar != null">
-                avatar = #{avatar}
+                avatar = #{avatar},
             </if>
             <if test="status != null">
                 status = #{status}
             </if>
         </set>
         where id = #{id}
+    </update>
+
+
+    <update id="updateRole">
+        update user set role = #{roleId} where id = #{userId}
     </update>
 
     <select id="checkLogin" resultType="User">

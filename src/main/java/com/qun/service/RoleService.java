@@ -7,9 +7,13 @@
  */
 package com.qun.service;
 
+import com.qun.entity.dto.RoleDTO;
 import com.qun.entity.po.Role;
 
+import java.util.List;
+
 public interface RoleService {
+    List<RoleDTO> getAll();
     Role getRole(Long id);
     String[] getPerms(Long id);
 }

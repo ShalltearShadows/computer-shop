@@ -7,10 +7,10 @@
  */
 package com.qun.service;
 
+import com.qun.entity.dto.PermDTO;
 import com.qun.entity.po.Permission;
-import com.qun.entity.vo.Menu;
+import com.qun.entity.dto.Menu;
 import com.qun.mapper.PermissionMapper;
-import com.qun.util.ShiroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +27,45 @@ public class PermissionServiceImpl implements PermissionService{
     @Override
     public List<Permission> getAll() {
         return permissionMapper.getAll();
+    }
+
+    @Override
+    public List<PermDTO> getOrderPermission() {
+
+        List<Permission> all = getAll();
+
+        List<PermDTO> perm2 = new ArrayList<>();
+        List<PermDTO> perm1 = new ArrayList<>();
+
+        for (Permission m : all) {
+            if (m.getLevel()==2){
+                perm2.add(new PermDTO(m.getPermId(),m.getParentId(),m.getName()));
+            }
+        }
+
+        for (PermDTO e : perm2) {
+            for (Permission n : all) {
+                if (n.getParentId()==e.getId()){
+                    e.setChildren(new PermDTO(n.getPermId(),n.getParentId(),n.getName()));
+                }
+            }
+        }
+
+        for (Permission m : all) {
+            if (m.getLevel()==1){
+                perm1.add(new PermDTO(m.getPermId(),m.getParentId(),m.getName()));
+            }
+        }
+
+        for (PermDTO p2 : perm2) {
+            for (PermDTO p1 : perm1) {
+                if (p1.getId()==p2.getParentId()){
+                    p1.setChildren(p2);
+                }
+            }
+        }
+
+        return perm1;
     }
 
     @Override

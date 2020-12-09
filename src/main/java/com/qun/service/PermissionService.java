@@ -7,13 +7,16 @@
  */
 package com.qun.service;
 
+import com.qun.entity.dto.PermDTO;
 import com.qun.entity.po.Permission;
-import com.qun.entity.vo.Menu;
+import com.qun.entity.dto.Menu;
 
 import java.util.List;
 
 public interface PermissionService {
     List<Permission> getAll();
+
+    List<PermDTO> getOrderPermission();
 
     List<Permission> getPermission(String[] ids);
 

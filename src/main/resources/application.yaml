@@ -18,11 +18,15 @@ spring:
 
 # mybatis
 mybatis:
-  type-aliases-package: com.qun.entity.po
+  type-aliases-package: com.qun.entity
   mapper-locations: classpath:mybatis/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true #驼峰命名
 
+# 打印SQL日志
+#logging:
+#  level:
+#    com.qun.mapper: debug
 
 
 lupus:
