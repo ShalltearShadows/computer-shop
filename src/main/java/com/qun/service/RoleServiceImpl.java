@@ -43,8 +43,25 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public String[] getPerms(Long id) {
-        return roleMapper.getPerms(id).split(",");
+    public int[] getPerms(Long id) {
+        String[] split = roleMapper.getPerms(id).split(",");
+        int[] perms = new int[split.length];
+        for (int i = 0; i < perms.length; i++) {
+            perms[i] = Integer.parseInt(split[i]);
+        }
+
+        return perms;
+    }
+
+    public int[] getPermsByRoleId(int id){
+
+        String[] split = roleMapper.getPermsByRoleId(id).split(",");
+        int[] perms = new int[split.length];
+        for (int i = 0; i < perms.length; i++) {
+            perms[i] = Integer.parseInt(split[i]);
+        }
+
+        return perms;
     }
 
 }

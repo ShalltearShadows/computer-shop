@@ -8,6 +8,7 @@
 package com.qun.service;
 
 import com.qun.entity.dto.PermDTO;
+import com.qun.entity.dto.RoleDTO;
 import com.qun.entity.po.Permission;
 import com.qun.entity.dto.Menu;
 
@@ -18,10 +19,12 @@ public interface PermissionService {
 
     List<PermDTO> getOrderPermission();
 
-    List<Permission> getPermission(String[] ids);
+    List<Permission> getPermission(int[] ids);
 
     @Deprecated
-    List<Menu> getDisorderMenu(String[] ids);
+    List<Menu> getDisorderMenu(int[] ids);
 
-    List<Menu> getOrderMenu(String[] ids);
+    List<Menu> getOrderMenu(int[] ids);
+
+    void getRoleAndPerm(List<RoleDTO> roleDTOS);
 }

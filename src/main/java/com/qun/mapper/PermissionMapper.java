@@ -19,5 +19,5 @@ import java.util.List;
 public interface PermissionMapper {
     List<Permission> getAll();
 
-    List<Permission> get(@Param("ids") String[] ids);
+    List<Permission> get(@Param("ids") int[] ids);
 }

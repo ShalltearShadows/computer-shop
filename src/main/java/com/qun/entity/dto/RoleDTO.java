@@ -9,8 +9,13 @@ package com.qun.entity.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class RoleDTO {
     private int id;
     private String name;
+    private int[] perm;
+
+    private List<PermDTO> children;
 }

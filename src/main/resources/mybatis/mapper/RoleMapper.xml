@@ -15,7 +15,9 @@
     <select id="getPerms" resultType="String">
         SELECT r.perms FROM pe_role r LEFT JOIN `user` u ON r.id = u.role WHERE u.id = #{id}
     </select>
-
+    <select id="getPermsByRoleId" resultType="String">
+        SELECT perms from pe_role where id = #{id}
+    </select>
     <insert id="add" parameterType="Role">
         insert into pe_role(name, perms)
             VALUES(#{name},#{right})

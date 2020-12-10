@@ -15,5 +15,6 @@ import java.util.List;
 public interface RoleService {
     List<RoleDTO> getAll();
     Role getRole(Long id);
-    String[] getPerms(Long id);
+    int[] getPerms(Long id);
+    int[] getPermsByRoleId(int id);
 }

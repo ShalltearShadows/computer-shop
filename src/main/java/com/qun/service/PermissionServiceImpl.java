@@ -8,6 +8,7 @@
 package com.qun.service;
 
 import com.qun.entity.dto.PermDTO;
+import com.qun.entity.dto.RoleDTO;
 import com.qun.entity.po.Permission;
 import com.qun.entity.dto.Menu;
 import com.qun.mapper.PermissionMapper;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -34,6 +36,13 @@ public class PermissionServiceImpl implements PermissionService{
 
         List<Permission> all = getAll();
 
+        return structuredPerm(all);
+    }
+
+    /**
+     * 结构化权限
+     */
+    private List<PermDTO> structuredPerm(List<Permission> all) {
         List<PermDTO> perm2 = new ArrayList<>();
         List<PermDTO> perm1 = new ArrayList<>();
 
@@ -64,17 +73,16 @@ public class PermissionServiceImpl implements PermissionService{
                 }
             }
         }
-
         return perm1;
     }
 
     @Override
-    public List<Permission> getPermission(String[] ids){
+    public List<Permission> getPermission(int[] ids){
         return permissionMapper.get(ids);
     }
 
     @Override
-    public List<Menu> getDisorderMenu(String[] ids) {
+    public List<Menu> getDisorderMenu(int[] ids) {
         List<Permission> list = getPermission(ids);
         List<Permission> all = getAll();
 
@@ -105,7 +113,7 @@ public class PermissionServiceImpl implements PermissionService{
         return menus;
     }
 
-    public List<Menu> getOrderMenu(String[] ids){
+    public List<Menu> getOrderMenu(int[] ids){
         List<Menu> menu = new ArrayList<>();
 
         List<Menu> all = getDisorderMenu(ids);
@@ -126,4 +134,24 @@ public class PermissionServiceImpl implements PermissionService{
 
         return menu;
     }
+
+    /**
+     * 获取每个角色结构化的全部权限
+     */
+    @Override
+    public void getRoleAndPerm(List<RoleDTO>  roleDTOS) {
+        for (RoleDTO dto : roleDTOS) {
+            System.out.println(Arrays.toString(dto.getPerm()));
+            List<Permission> list = permissionMapper.get(dto.getPerm());
+
+            for (Permission permission : list) {
+                System.out.println(permission.toString());
+            }
+
+
+            List<PermDTO> permDTOS = structuredPerm(list);
+            dto.setChildren(permDTOS);
+        }
+    }
+
 }

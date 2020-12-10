@@ -38,8 +38,10 @@ const router = new VueRouter({
             redirect: '/welcome',
             children: [
                 {path: '/welcome', component: Welcome},
+
                 {path: '/user/list', component: Users},
-                {path: '/roles', component: Roles},
+                {path: '/perm/role', component: Roles},
+
                 {path: '/rights', component: Rights},
                 {path: '/categories', component: Cate},
                 {path: '/params', component: Params},
@@ -49,7 +51,6 @@ const router = new VueRouter({
                 {path: '/reports', component: Report},
             ]
         }
-
     ]
 });
 
@@ -65,11 +66,7 @@ router.beforeEach((to, from, next) => {
     if (!tokenstr) {
         return next('/login');
     }
-
     next();
-
-
 });
-
 
 export default router;

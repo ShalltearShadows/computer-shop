@@ -19,6 +19,7 @@ public interface RoleMapper {
     List<Role> getAll();
     Role getRole(Long id);
     String getPerms(Long id);
+    String getPermsByRoleId(int id);
     int add(Role role);
     int delete(Long id);
     int update(Role role);
