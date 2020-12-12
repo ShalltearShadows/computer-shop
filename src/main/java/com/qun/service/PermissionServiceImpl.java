@@ -141,17 +141,12 @@ public class PermissionServiceImpl implements PermissionService{
     @Override
     public void getRoleAndPerm(List<RoleDTO>  roleDTOS) {
         for (RoleDTO dto : roleDTOS) {
-            System.out.println(Arrays.toString(dto.getPerm()));
             List<Permission> list = permissionMapper.get(dto.getPerm());
-
-            for (Permission permission : list) {
-                System.out.println(permission.toString());
-            }
-
 
             List<PermDTO> permDTOS = structuredPerm(list);
             dto.setChildren(permDTOS);
         }
     }
+
 
 }

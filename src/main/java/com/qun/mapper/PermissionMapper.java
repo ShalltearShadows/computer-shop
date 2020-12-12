@@ -20,4 +20,5 @@ public interface PermissionMapper {
     List<Permission> getAll();
 
     List<Permission> get(@Param("ids") int[] ids);
+
 }

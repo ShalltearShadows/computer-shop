@@ -27,4 +27,5 @@ public interface PermissionService {
     List<Menu> getOrderMenu(int[] ids);
 
     void getRoleAndPerm(List<RoleDTO> roleDTOS);
+
 }

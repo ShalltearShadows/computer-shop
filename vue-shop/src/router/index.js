@@ -42,7 +42,8 @@ const router = new VueRouter({
                 {path: '/user/list', component: Users},
                 {path: '/perm/role', component: Roles},
 
-                {path: '/rights', component: Rights},
+                {path: '/perm/list', component: Rights},
+
                 {path: '/categories', component: Cate},
                 {path: '/params', component: Params},
                 {path: '/goods', component: GoodsList},

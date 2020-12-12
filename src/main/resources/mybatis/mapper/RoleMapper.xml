@@ -18,26 +18,24 @@
     <select id="getPermsByRoleId" resultType="String">
         SELECT perms from pe_role where id = #{id}
     </select>
-    <insert id="add" parameterType="Role">
-        insert into pe_role(name, perms)
-            VALUES(#{name},#{right})
+
+    <insert id="addRole">
+        insert into pe_role(name) VALUES(#{name})
     </insert>
 
     <delete id="delete">
         delete from pe_role where id = #{id}
     </delete>
 
-    <update id="update" parameterType="Role">
-        update pe_role
-        <set>
-            <if test="name != null">
-                name = #{name}
-            </if>
-            <if test="perms != null">
-                perms = #{perms}
-            </if>
-        </set>
-        where id = #{id}
+    <update id="alterPerms">
+        update pe_role set perms = #{ids} where id = #{id}
     </update>
 
+    <update id="deletePerms">
+        update pe_role set perms = #{perm} where id = #{id}
+    </update>
+
+    <update id="alterName">
+        update pe_role set name = #{name} where id = #{rid}
+    </update>
 </mapper>
