@@ -41,12 +41,15 @@ const router = new VueRouter({
 
                 {path: '/user/list', component: Users},
                 {path: '/perm/role', component: Roles},
-
                 {path: '/perm/list', component: Rights},
 
-                {path: '/categories', component: Cate},
+                //商品列表
+                {path: '/good/list', component: GoodsList},
+                //参数列表
                 {path: '/params', component: Params},
-                {path: '/goods', component: GoodsList},
+                //商品分类
+                {path: '/categories', component: Cate},
+                //添加商品
                 {path: '/goods/add', component: Add},
                 {path: '/orders', component: Order},
                 {path: '/reports', component: Report},

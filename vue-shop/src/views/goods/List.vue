@@ -23,22 +23,24 @@
 
             <!-- 表格数据 -->
             <el-table :data="goodsList" border stripe>
-                <el-table-column type="index"></el-table-column>
-                <el-table-column label="商品名称" prop="goods_name"></el-table-column>
-                <el-table-column label="商品价格(元)" prop="goods_price" width="100px"></el-table-column>
-                <el-table-column label="商品重量" prop="goods_weight" width="70px"></el-table-column>
-                <el-table-column label="商品数量" prop="goods_number" width="70px"></el-table-column>
-                <el-table-column label="创建时间" prop="add_time" width="140px">
-                    <template slot-scope="scope">{{ scope.row.add_time | dateFormat }}</template>
-                </el-table-column>
-                <el-table-column label="操作" width="130px">
+                <el-table-column label="#" type="index"></el-table-column>
+                <el-table-column label="编号" prop="id" width="170px"></el-table-column>
+                <el-table-column label="品牌" prop="brand" width="370px"></el-table-column>
+                <el-table-column label="价格" prop="price" width="120px"></el-table-column>
+                <el-table-column label="CPU" prop="cpu" width="120px"></el-table-column>
+                <el-table-column label="GPU" prop="gpu" width="120px"></el-table-column>
+                <el-table-column label="内存" prop="memory" width="120px"></el-table-column>
+                <el-table-column label="硬盘" prop="hardDisk" width="120px"></el-table-column>
+                <el-table-column label="分辨率" prop="screen" width="120px"></el-table-column>
+                <el-table-column label="库存" prop="stock" width="120px"></el-table-column>
+
+                <el-table-column label="操作" >
                     <template slot-scope="scope">
                         <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
                         <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.goods_id)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
-
 
             <!-- 分页区域 -->
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -69,14 +71,14 @@
         methods: {
             // 根据分页获取对应的商品列表
             async getGoodsList() {
-                const {data: res} = await this.$http.get('goods', {
+                const {data: res} = await this.$http.get('good/list', {
                     params: this.queryInfo
                 });
-                if (res.meta.status !== 200) {
+                if (res.code !== 200) {
                     return this.$message.error('获取商品列表失败！')
                 }
+
                 this.goodsList = res.data.goods;
-                //   console.log(this.goodsList)
                 this.total = res.data.total
             },
             handleSizeChange(newSize) {

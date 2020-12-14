@@ -6,6 +6,19 @@
 
     <select id="getAll" resultType="Computer">
         select * from computer
+        <where>
+            <if test="query != null">
+                id like concat('%',#{query},'%') or
+                brand like concat('%',#{query},'%') or
+                cpu like concat('%',#{query},'%') or
+                gpu like concat('%',#{query},'%')
+            </if>
+        </where>
+        limit #{start},#{num}
+    </select>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from computer
     </select>
 
     <select id="get" resultType="Computer">

@@ -8,7 +8,9 @@
 package com.qun.mapper;
 
 import com.qun.entity.po.Computer;
+import com.qun.entity.po.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,9 +18,17 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ComputerMapper {
-    List<Computer> getAll();
+
+    List<Computer> getAll(@Param("start") int start, @Param("num") int num, @Param("query") String query);
+
+    int getTotal();
+
     Computer get(long id);
+
     int add(Computer computer);
+
     int delete(long id);
+
     int update(Computer computer);
+
 }

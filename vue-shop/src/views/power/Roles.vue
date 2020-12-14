@@ -194,7 +194,7 @@
                 const { data: res } = await this.$http.post(
                     'perm/delperm/',{roleId:role.id,permId:rightId}
                 );
-                //TODO
+
                 if (res.code !== 200) {
                     return this.$message.error('删除权限失败！')
                 }
