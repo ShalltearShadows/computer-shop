@@ -7,6 +7,7 @@
  */
 package com.qun.service;
 
+import com.qun.entity.dto.ForegroundMainListDTO;
 import com.qun.entity.po.Computer;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public interface ComputerService {
 
     List<Computer> getAll(int start,int num, String query);
+
+    List<ForegroundMainListDTO> getFFL();
 
     int getTotal();
 
@@ -25,4 +28,6 @@ public interface ComputerService {
     int delete(long id);
 
     int update(Computer computer);
+
+    int upload(@Param("image") String image);
 }

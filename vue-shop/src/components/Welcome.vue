@@ -1,10 +1,6 @@
 <template>
     <div>
         <h3>Welcome</h3>
-      <el-button type="primary" @click="send1">测试1</el-button>
-      <el-button type="primary" @click="send2">测试2</el-button>
-      <el-button type="primary" @click="send3">测试3</el-button>
-      <el-button type="primary" @click="send4">测试4</el-button>
 
     </div>
 </template>

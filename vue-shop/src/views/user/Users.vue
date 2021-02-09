@@ -287,10 +287,6 @@
                     }
                     const {data:res} = await this.$http.post('user/add',this.addForm)
 
-                    if (res.code!==200){
-                        return this.$message.error('添加用户失败！');
-                    }
-
                     this.$message.success('添加用户成功！');
 
                     //关闭窗口

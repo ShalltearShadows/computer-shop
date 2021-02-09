@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -103,12 +104,28 @@ public class UserController {
     @PostMapping("/role/{id}")
     @RequiresPermissions("user:list:role")
     public Result role(@NotNull @PathVariable("id") Long id,@RequestBody RoleDTO roleDTO){
-        System.out.println(roleDTO.getId());
         int flag = userService.updateRole(id, roleDTO.getId());
         return flag==1?Result.success("分配成功"):Result.fail("分配失败");
     }
 
+    @GetMapping("/info")
+    @RequiresAuthentication
+    public Result info(){
+        Long id = ShiroUtil.getProfile().getId();
+        return Result.success(userService.get(id).setPassword(""));
+    }
 
+    @PostMapping("/alter")
+    public Result alter(@RequestBody User user){
+        int flag = userService.update(user);
+        return flag==1?Result.success("修改成功"):Result.fail("修改失败");
+    }
+
+    @PostMapping("/password")
+    public Result password(@RequestBody PwdDTO pwd){
+        int flag = userService.updatePassword(pwd.getId(),pwd.getPassword());
+        return flag==1?Result.success("修改成功"):Result.fail("修改失败");
+    }
 
 
     @GetMapping("/perm")

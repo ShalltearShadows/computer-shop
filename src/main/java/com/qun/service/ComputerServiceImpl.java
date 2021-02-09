@@ -7,6 +7,7 @@
  */
 package com.qun.service;
 
+import com.qun.entity.dto.ForegroundMainListDTO;
 import com.qun.entity.po.Computer;
 import com.qun.mapper.ComputerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class ComputerServiceImpl implements ComputerService{
     }
 
     @Override
+    public List<ForegroundMainListDTO> getFFL() {
+        return computerMapper.getFFL();
+    }
+
+    @Override
     public int getTotal() {
         return computerMapper.getTotal();
     }
@@ -38,16 +44,21 @@ public class ComputerServiceImpl implements ComputerService{
 
     @Override
     public int add(Computer computer) {
-        return 0;
+        return computerMapper.add(computer);
     }
 
     @Override
     public int delete(long id) {
-        return 0;
+        return computerMapper.delete(id);
     }
 
     @Override
     public int update(Computer computer) {
-        return 0;
+        return computerMapper.update(computer);
+    }
+
+    @Override
+    public int upload(String image) {
+        return computerMapper.upload(image);
     }
 }

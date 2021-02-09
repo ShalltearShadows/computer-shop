@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @Accessors(chain = true) //链式写法
@@ -22,6 +23,7 @@ public class Computer implements Serializable {
     private String screen;
     private String memory;
     private String hardDisk;
-    private String price;
-    private String stock;
+    private BigDecimal price;
+    private int stock;
+    private String image;
 }

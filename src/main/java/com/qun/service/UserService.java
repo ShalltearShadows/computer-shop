@@ -32,4 +32,6 @@ public interface UserService {
 
     boolean checkLogin(long id, String password);
 
+    int updatePassword(long id,String password);
+
 }

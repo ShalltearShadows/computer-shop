@@ -69,4 +69,11 @@ public class UserServiceImpl implements UserService{
     public boolean checkLogin(long id, String password) {
         return userMapper.checkLogin(id, password) != null;
     }
+
+    @Override
+    public int updatePassword(long id, String password) {
+        return userMapper.updatePassword(id,password);
+    }
+
+
 }

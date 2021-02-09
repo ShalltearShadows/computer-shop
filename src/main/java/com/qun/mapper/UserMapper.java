@@ -33,4 +33,6 @@ public interface UserMapper {
     int updateRole(@Param("userId") Long userId,@Param("roleId") int RoleId);
 
     User checkLogin(@Param("id") long id, @Param("password") String password);
+
+    int updatePassword(@Param("id") long id,@Param("password") String password);
 }

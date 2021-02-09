@@ -36,8 +36,8 @@
 
                 <el-table-column label="操作" >
                     <template slot-scope="scope">
-                        <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
-                        <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.goods_id)"></el-button>
+                        <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateById(scope.row.id)">修改</el-button>
+                        <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -46,6 +46,46 @@
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                            :current-page="queryInfo.pagenum" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pagesize"
                            layout="total, sizes, prev, pager, next, jumper" :total="total" background></el-pagination>
+
+          <!--修改商品对话框-->
+          <el-dialog title="修改用户" :visible.sync="editGoodVisible" width="40%" @close="editGoodDialogClosed">
+            <!--输入区-->
+            <el-form :model="editGoodForm" :rules="editFormRules" ref="editGoodFormRef" label-width="70px" class="demo-ruleForm">
+              <el-form-item label="编号">
+                <el-input v-model="editGoodForm.id" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="品牌" prop="brand">
+                <el-input v-model="editGoodForm.brand" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="价格" prop="price">
+                <el-input v-model="editGoodForm.price" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="CPU">
+                <el-input v-model="editGoodForm.cpu" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="GPU">
+                <el-input v-model="editGoodForm.gpu" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="内存">
+                <el-input v-model="editGoodForm.memory" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="硬盘">
+                <el-input v-model="editGoodForm.hardDisk" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="分辨率">
+                <el-input v-model="editGoodForm.screen" clearable></el-input>
+              </el-form-item>
+              <el-form-item label="库存" prop="stock">
+                <el-input v-model="editGoodForm.stock" clearable></el-input>
+              </el-form-item>
+            </el-form>
+
+            <!-- 按钮区 -->
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editGoodVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editGood">确 定</el-button>
+            </span>
+          </el-dialog>
         </el-card>
     </div>
 </template>
@@ -62,7 +102,31 @@
                 // 商品列表
                 goodsList: [],
                 // 商品总数
-                total: 0
+                total: 0,
+              editGoodVisible: false,
+              editGoodForm:{
+                id: '',
+                brand: '',
+                price: '',
+                cpu: '',
+                gpu: '',
+                memory: '',
+                hardDisk: '',
+                screen: '',
+                stock: ''
+
+              },
+              editFormRules: {
+                brand: [
+                  {required: true, message: "请输入品牌", trigger: "blur"}
+                ],
+                price: [
+                  {required: true, message: "请输入价格", trigger: "blur"}
+                ],
+                stock: [
+                  {required: true, message: "请输入库存", trigger: "blur"}
+                ]
+              }
             }
         },
         created() {
@@ -90,7 +154,7 @@
                 this.getGoodsList()
             },
             // 通过Id删除商品
-            async removeById(id) {
+            async removeById(gid) {
                 const confirmResult = await this.$confirm(
                     '此操作将永久删除该商品, 是否继续?',
                     '提示',
@@ -103,16 +167,45 @@
                 if (confirmResult !== 'confirm') {
                     return this.$message.info('已取消删除！')
                 }
-                const {data: res} = await this.$http.delete('goods/' + id);
-                if (res.meta.status !== 200) {
+                const {data: res} = await this.$http.post('good/delete', {id:gid});
+                if (res.code !== 200) {
                     return this.$message.error('删除商品失败！')
                 }
                 this.$message.success('删除商品成功！');
                 this.getGoodsList()
             },
+            updateById(id){
+              this.editGoodForm.id = id;
+              this.editGoodVisible = true;
+            },
             goAddPage() {
                 this.$router.push('/goods/add')
-            }
+            },
+          editGoodDialogClosed(){
+            this.editGoodForm.brand = ''
+            this.editGoodForm.price = ''
+            this.editGoodForm.cpu = ''
+            this.editGoodForm.gpu = ''
+            this.editGoodForm.memory = ''
+            this.editGoodForm.hardDisk = ''
+            this.editGoodForm.screen = ''
+            this.editGoodForm.stock = ''
+          },
+          editGood(){
+              this.$refs.editGoodFormRef.validate(async valid =>{
+                if (!valid){
+                  return;
+                }
+                const {data: res} = await this.$http.post('good/update',this.editGoodForm)
+
+                this.$message.success('修改成功！');
+
+                this.editGoodVisible = false;
+
+                this.getGoodsList()
+
+              })
+          }
         }
     }
 </script>
