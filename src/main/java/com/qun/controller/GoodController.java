@@ -96,8 +96,8 @@ public class GoodController {
     }
 
     @GetMapping("/fml")
-    public Result getFFL(){
-        List<ForegroundMainListDTO> ffl = computerService.getFFL();
+    public Result getFFL(@RequestParam("num") int num){
+        List<ForegroundMainListDTO> ffl = computerService.getFFL((num-1)*5);
         return Result.success(ffl);
     }
 }

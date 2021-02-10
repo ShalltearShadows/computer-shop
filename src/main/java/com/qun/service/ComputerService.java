@@ -17,7 +17,7 @@ public interface ComputerService {
 
     List<Computer> getAll(int start,int num, String query);
 
-    List<ForegroundMainListDTO> getFFL();
+    List<ForegroundMainListDTO> getFFL(int start);
 
     int getTotal();
 

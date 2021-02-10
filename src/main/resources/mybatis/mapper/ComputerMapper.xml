@@ -18,7 +18,7 @@
     </select>
 
     <select id="getFFL" resultType="ForegroundMainListDTO">
-        select brand,cpu,gpu,image url  from computer
+        select brand,cpu,gpu,image url  from computer limit #{start},5
     </select>
 
     <select id="getTotal" resultType="int">

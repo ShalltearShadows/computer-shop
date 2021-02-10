@@ -28,8 +28,8 @@ public class ComputerServiceImpl implements ComputerService{
     }
 
     @Override
-    public List<ForegroundMainListDTO> getFFL() {
-        return computerMapper.getFFL();
+    public List<ForegroundMainListDTO> getFFL(int start) {
+        return computerMapper.getFFL(start);
     }
 
     @Override

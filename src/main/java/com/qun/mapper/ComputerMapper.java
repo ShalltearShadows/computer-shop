@@ -21,7 +21,7 @@ public interface ComputerMapper {
 
     List<Computer> getAll(@Param("start") int start, @Param("num") int num, @Param("query") String query);
 
-    List<ForegroundMainListDTO> getFFL();
+    List<ForegroundMainListDTO> getFFL(int start);
 
     int getTotal();
 

@@ -20,21 +20,17 @@
       </div>
 
       <div>
-        <el-table :data="fmlData" stripe style="width: 1000px;margin: auto">
-          <el-table-column width="120">
-            <template slot-scope="scope">
-              <el-image style="width: 100px; height: 100px" :src="scope.row.url" fit="fill"></el-image>
-            </template>
-          </el-table-column>
-          <el-table-column width="180">
-            <template slot-scope="scope">
-              品牌：{{scope.row.brand}}<br>
-              CPU：{{scope.row.cpu}}<br>
-              GPU：{{scope.row.gpu}}
-            </template>
-          </el-table-column>
-          <el-table-column prop="address"></el-table-column>
-        </el-table>
+        <ul class="infinite-list" style="overflow:auto" v-infinite-scroll="getFML">
+          <li v-for="item in fmlData" class="infinite-list-item">
+            <el-image style="width: 100px; height: 100px;margin-left: 10px" :src="item.url" fit="fill"></el-image>
+            <div style="margin-left: 20px">
+              品牌：{{item.brand}}<br>
+              CPU：{{item.cpu}}<br>
+              GPU：{{item.gpu}}
+            </div>
+          </li>
+        </ul>
+
       </div>
     </el-main>
 
@@ -51,22 +47,25 @@ export default {
   data() {
     return {
       input: '',
-      fmlData:[
-        {url:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',brand:'小鸟',cpu:'i7-10870',gpu:'RTX2070'}
-      ]
+      fmlData: [],
+      num:1
     }
   },
   created() {
-    this.getFFL()
+    // this.getFML()
   },
-  methods:{
-    async getFFL(){
-      const {data: res} = await this.$http.get('good/fml');
-      if (res.code !== 200) {
-        return this.$message.error('获取列表失败！')
-      }
 
-      this.fmlData = res.data;
+  methods:{
+     getFML(){
+       console.log(333)
+       this.$http.get('good/fml',{params:{num:this.num}}).then(res=>{
+         if (res.data.code !== 200) {
+           return this.$message.error('获取列表失败！')
+         }
+         this.fmlData.push(...res.data.data)
+         this.num++
+       });
+
     }
   }
 }
@@ -109,10 +108,27 @@ export default {
   bottom: 0;
   width: 100%;
   text-align: center;
-  background-color: #898585;
-  color: #fff;
+  /*background-color: #898585;*/
+  /*color: #fff;*/
   font-family: Arial;
   font-size: 14px;
   letter-spacing: 1px;
+}
+
+.infinite-list {
+  height: 1000px;
+  width: 1000px;
+  padding: 0;
+  margin: auto;
+  list-style: none;
+}
+.infinite-list .infinite-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 120px;
+  background: #e8f3fe;
+  margin: 10px;
+  color: #7dbcfc;
 }
 </style>
