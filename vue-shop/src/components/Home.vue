@@ -14,6 +14,7 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item><el-link href="/foreground">前台</el-link></el-dropdown-item>
+          <el-dropdown-item divided><el-link href="/indi/info">个人信息</el-link></el-dropdown-item>
           <el-dropdown-item divided><el-link @click="quit">退出</el-link></el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

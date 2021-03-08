@@ -10,12 +10,34 @@
         <div v-if="avatar===null">
           <el-link :underline="false" href="/login">登录</el-link>
         </div>
-        <div v-else>
-          <el-badge style="margin-right: 20px" :hidden="count===0?true:false" :value="count" class="item">
-            <el-link class="el-link-icon" icon="el-icon-shopping-cart-1" :underline="false" href="#"></el-link>
-          </el-badge>
-          <el-avatar fit="fill" :src="avatar"></el-avatar>
-        </div>
+        <el-row v-else>
+          <!-- 购物车 -->
+          <el-col :span="12">
+            <el-dropdown>
+            <span class="el-dropdown-link">
+              <el-badge style="margin-right: 20px; height: 16px" :hidden="count===0?true:false" :value="count" class="item">
+                <el-link class="el-link-icon" icon="el-icon-shopping-cart-1" :underline="false" href="#"></el-link>
+              </el-badge>
+            </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>1</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-col>
+          <!-- 头像区 -->
+          <el-col :span="12">
+            <el-dropdown>
+            <span class="el-dropdown-link">
+              <el-avatar fit="fill" :src="avatar"></el-avatar>
+            </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item><el-link href="/welcome">后台</el-link></el-dropdown-item>
+                <el-dropdown-item divided><el-link href="/indi/info">个人信息</el-link></el-dropdown-item>
+                <el-dropdown-item divided><el-link @click="quit">退出</el-link></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-col>
+        </el-row>
       </div>
 
     </el-header>
@@ -56,8 +78,15 @@
             分辨率： {{editForm.screen}} <br>
             内存： {{editForm.memory}} <br>
             硬盘： {{editForm.hardDisk}} <br>
+            库存： {{editForm.stock}} <br>
             价格： {{'￥'+editForm.price}} <br>
+
+            <el-row style="margin-top: 30px">
+              <el-col :span="8">数量:</el-col>
+              <el-col :span="16" ><el-input-number size="small" v-model="inputCount" :min="1" :max="editForm.stock"></el-input-number></el-col>
+            </el-row>
           </div>
+
         </div>
 
         <!-- 按钮区 -->
@@ -96,8 +125,10 @@ export default {
         price: '',
         stock: '',
       },
-      count:7,
-      avatar:null
+      count:0,
+      avatar:null,
+      cart:[],
+      inputCount:1,
     }
   },
   created() {
@@ -138,11 +169,32 @@ export default {
       this.getFML()
     },
     addCart() {
-
+      this.cart.push(this.editForm)
+      this.count = this.cart.length
     },
     async queryInfo(){
       const {data:res} = await this.$http.get('good/query',{params:{info:this.input}})
       this.fmlData = res.data
+    },
+    quit() {
+      //删除token
+      window.sessionStorage.removeItem('token');
+      window.sessionStorage.removeItem('avatar');
+      this.$store.commit("REMOVE_INFO")
+      //跳转到登录页
+      this.$router.push('/foreground')
+    },
+    addCount(stock){
+      if (stock>this.inputCount){
+        this.inputCount++
+      }else {
+        this.$message.error("库存不足")
+      }
+    },
+    reduceCount(){
+      if (this.inputCount>1){
+        this.inputCount--
+      }
     }
   }
 }
