@@ -9,21 +9,29 @@ package com.qun.controller;
 
 import com.qun.common.lang.Result;
 import com.qun.entity.dto.*;
-import com.qun.entity.po.Permission;
+import com.qun.entity.dto.Menu;
 import com.qun.entity.po.User;
 import com.qun.service.PermissionService;
 import com.qun.service.RoleService;
 import com.qun.service.UserService;
+import com.qun.util.ImageUtil;
 import com.qun.util.ShiroUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Base64;
+import java.util.Base64.Encoder;
+import javax.imageio.ImageIO;
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
+import java.io.*;
 import java.util.List;
 
 
@@ -141,6 +149,58 @@ public class UserController {
     @RequiresPermissions("sys:list:info")
     public Result home(){
         return Result.fail("");
+    }
+
+    @PostMapping("/upload")
+    public Result upload(MultipartFile file) throws IOException {
+        if(file==null){
+            return Result.fail("图片为空");
+        }
+
+        String upload = "D:\\upload\\avatar";
+        String name = file.getOriginalFilename();
+        assert name != null;
+        String suffix = "png";
+        String imgName = ShiroUtil.getProfile().getId()+"."+suffix;
+        File image = new File(upload,imgName);
+
+        try {
+            file.transferTo(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int w = 238;
+        BufferedImage bi = null;
+        try {
+             bi = ImageIO.read(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        double width = bi.getWidth();
+        int h = (int) (bi.getHeight()*(w/width));
+
+        ImageUtil.changeSize(w,h,upload+"//"+imgName);
+
+        return avatar();
+
+    }
+
+    @GetMapping("/avatar")
+    public Result avatar() throws IOException {
+        long id = ShiroUtil.getProfile().getId();
+        File file = new File("D:\\upload\\avatar\\" + id + ".png");
+
+        byte[] data = null;
+        try (InputStream is = new FileInputStream("D:\\upload\\avatar\\" + id + ".png")){
+            data = new byte[is.available()];
+            is.read(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // 加密
+        Encoder encoder = Base64.getEncoder();
+        return Result.success(encoder.encodeToString(data));
     }
 
 }

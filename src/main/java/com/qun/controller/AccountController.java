@@ -55,7 +55,6 @@ public class AccountController {
         return Result.success(MapUtil.builder()
                 .put("id",user.getId())
                 .put("username",user.getUsername())
-                .put("avatar",user.getAvatar())
                 .put("address",user.getAddress())
                 .put("role",user.getRole())
                 .map()

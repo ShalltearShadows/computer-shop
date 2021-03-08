@@ -26,7 +26,6 @@ const Add = () => import(/* webpackChunkName: "Add_Order_Report" */ '../views/go
 const Order = () => import(/* webpackChunkName: "Add_Order_Report" */ '../views/order/Order');
 const Report = () => import(/* webpackChunkName: "Add_Order_Report" */ '../views/report/Report');
 
-
 Vue.use(VueRouter);
 
 

@@ -2,11 +2,22 @@
   <el-container>
     <el-header class="header">
       <div style="margin-top: 15px; width:800px;display: inline-block;margin: auto">
-        <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input class="input-with-select" placeholder="请输入内容" v-model="input" clearable @click="queryInfo" @clear="clearInput">
+          <el-button slot="append" icon="el-icon-search" @click="queryInfo"></el-button>
         </el-input>
       </div>
-      <el-link type="primary" :underline="false" href="/login">登录</el-link>
+      <div style="padding-top: 16px">
+        <div v-if="avatar===null">
+          <el-link :underline="false" href="/login">登录</el-link>
+        </div>
+        <div v-else>
+          <el-badge style="margin-right: 20px" :hidden="count===0?true:false" :value="count" class="item">
+            <el-link class="el-link-icon" icon="el-icon-shopping-cart-1" :underline="false" href="#"></el-link>
+          </el-badge>
+          <el-avatar fit="fill" :src="avatar"></el-avatar>
+        </div>
+      </div>
+
     </el-header>
 
     <el-main>
@@ -14,24 +25,48 @@
       <div class="carousel-css">
         <el-carousel :interval="4000" type="card" height="400px">
           <el-carousel-item v-for="(item,key) in fmlData" :key="key">
-            <el-image :src="item.url" fit="fill"></el-image>
+            <el-image :src="item.url" @click="showDialog(item.id)" fit="fill"></el-image>
           </el-carousel-item>
         </el-carousel>
       </div>
 
       <div>
-        <ul class="infinite-list" style="overflow:auto" v-infinite-scroll="getFML">
+        <ul class="infinite-list" style="overflow:auto" v-infinite-scroll="getFML" >
           <li v-for="item in fmlData" class="infinite-list-item">
-            <el-image style="width: 100px; height: 100px;margin-left: 10px" :src="item.url" fit="fill"></el-image>
+            <el-image style="width: 100px; height: 100px;margin-left: 10px" :src="item.url" @click="showDialog(item.id)" fit="fill"></el-image>
             <div style="margin-left: 20px">
-              品牌：{{item.brand}}<br>
-              CPU：{{item.cpu}}<br>
-              GPU：{{item.gpu}}
+              品牌：{{ item.brand }}<br>
+              CPU：{{ item.cpu }}<br>
+              GPU：{{ item.gpu }}
             </div>
+            <el-link></el-link>
           </li>
         </ul>
-
       </div>
+
+      <!--商品信息框-->
+      <el-dialog title="详细信息" :visible.sync="infoDialogVisible" width="50%" @close="infoDialogClosed">
+        <div style="display: flex">
+          <el-image style="width: 500px; height: auto;margin-left: 10px" :src="editForm.url" fit="fill"></el-image>
+
+          <div class="dialog-main">
+            品牌：{{editForm.brand}} <br>
+            CPU： {{editForm.cpu}} <br>
+            GPU： {{editForm.gpu}} <br>
+            分辨率： {{editForm.screen}} <br>
+            内存： {{editForm.memory}} <br>
+            硬盘： {{editForm.hardDisk}} <br>
+            价格： {{'￥'+editForm.price}} <br>
+          </div>
+        </div>
+
+        <!-- 按钮区 -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="infoDialogVisible = false">取 消</el-button>
+          <el-button type="success" @click="addCart">加入购物车</el-button>
+          <el-button type="warning">购 买</el-button>
+        </span>
+      </el-dialog>
     </el-main>
 
     <el-footer>
@@ -47,25 +82,67 @@ export default {
   data() {
     return {
       input: '',
+      num: 1,
       fmlData: [],
-      num:1
+      infoDialogVisible: false,
+      editForm: {
+        brand: '',
+        cpu: '',
+        gpu: '',
+        url: '',
+        screen: '',
+        memory: '',
+        hardDisk: '',
+        price: '',
+        stock: '',
+      },
+      count:7,
+      avatar:null
     }
   },
   created() {
-    // this.getFML()
+    this.avatar = window.sessionStorage.getItem('avatar')
   },
+  methods: {
+    getFML() {
+      this.$http.get('good/fml', {params: {num: this.num}}).then(res => {
+        if (res.data.code !== 200) {
+          return this.$message.error('获取列表失败！')
+        }
+        this.fmlData.push(...res.data.data)
+        this.num++
+      });
+    },
+    async showDialog(id) {
+      //TODO 获取电脑信息
+      const {data: res} = await this.$http.get('good/' + id)
 
-  methods:{
-     getFML(){
-       console.log(333)
-       this.$http.get('good/fml',{params:{num:this.num}}).then(res=>{
-         if (res.data.code !== 200) {
-           return this.$message.error('获取列表失败！')
-         }
-         this.fmlData.push(...res.data.data)
-         this.num++
-       });
+      this.editForm.brand = res.data.brand
+      this.editForm.cpu = res.data.cpu
+      this.editForm.gpu = res.data.gpu
+      // this.editForm.url = res.data.url
+      this.editForm.url = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+      this.editForm.screen = res.data.screen
+      this.editForm.memory = res.data.memory
+      this.editForm.hardDisk = res.data.hardDisk
+      this.editForm.price = res.data.price
+      this.editForm.stock = res.data.stock
 
+      this.infoDialogVisible = true
+    },
+    infoDialogClosed() {
+      this.editForm = []
+    },
+    clearInput(){
+      this.num = 1
+      this.getFML()
+    },
+    addCart() {
+
+    },
+    async queryInfo(){
+      const {data:res} = await this.$http.get('good/query',{params:{info:this.input}})
+      this.fmlData = res.data
     }
   }
 }
@@ -102,7 +179,7 @@ export default {
   justify-content: flex-end;
 }
 
-.el-footer{
+.el-footer {
   height: 30px;
   line-height: 35px;
   bottom: 0;
@@ -122,6 +199,7 @@ export default {
   margin: auto;
   list-style: none;
 }
+
 .infinite-list .infinite-list-item {
   display: flex;
   align-items: center;
@@ -129,6 +207,15 @@ export default {
   height: 120px;
   background: #e8f3fe;
   margin: 10px;
-  color: #7dbcfc;
+  color: #25272a;
+}
+
+.dialog-main{
+  margin-left: 70px;
+  line-height: 35px;
+  color: cadetblue;
+}
+.el-link-icon{
+  font-size: 24px;
 }
 </style>

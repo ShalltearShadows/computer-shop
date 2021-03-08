@@ -52,9 +52,6 @@
             <if test="role != null">
                 role = #{role},
             </if>
-            <if test="avatar != null">
-                avatar = #{avatar},
-            </if>
             <if test="status != null">
                 status = #{status}
             </if>

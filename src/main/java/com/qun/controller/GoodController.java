@@ -55,7 +55,7 @@ public class GoodController {
             return Result.fail("图片为空");
         }
 
-        String upload = "D:\\upload";
+        String upload = "D:\\upload\\computer";
 
         String name = file.getOriginalFilename();
 
@@ -99,5 +99,17 @@ public class GoodController {
     public Result getFFL(@RequestParam("num") int num){
         List<ForegroundMainListDTO> ffl = computerService.getFFL((num-1)*5);
         return Result.success(ffl);
+    }
+
+    @GetMapping("/{id}")
+    public Result getGood(@PathVariable("id") long id){
+        Computer computer = computerService.get(id);
+        return Result.success(computer);
+    }
+
+    @GetMapping("/query")
+    public Result query(@RequestParam("info") String info){
+        List<ForegroundMainListDTO> query = computerService.query(info);
+        return Result.success(query);
     }
 }

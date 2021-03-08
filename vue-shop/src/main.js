@@ -70,6 +70,7 @@ import './assets/fonts/iconfont.css'
 
 // 导入树形网格
 import TreeTable from 'vue-table-with-tree-grid'
+import bus from "@/router/bus";
 Vue.component('tree-table',TreeTable);
 
 
@@ -97,8 +98,14 @@ Vue.filter('dateFormat',function (originVal) {
     return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
 });
 
+const Bus = new Vue()
 
 new Vue({
-  router,
-  render: h => h(App)
+    router,
+    render: h => h(App),
+    data(){
+        return {
+            Bus
+        }
+    }
 }).$mount('#app');

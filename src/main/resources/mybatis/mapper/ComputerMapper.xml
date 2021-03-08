@@ -17,8 +17,12 @@
         limit #{start},#{num}
     </select>
 
+    <select id="query" resultType="ForegroundMainListDTO">
+        select id,brand,cpu,gpu,image url  from computer where brand like concat('%',#{query},'%')
+    </select>
+
     <select id="getFFL" resultType="ForegroundMainListDTO">
-        select brand,cpu,gpu,image url  from computer limit #{start},5
+        select id,brand,cpu,gpu,image url  from computer limit #{start},5
     </select>
 
     <select id="getTotal" resultType="int">

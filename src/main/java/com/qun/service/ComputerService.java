@@ -30,4 +30,7 @@ public interface ComputerService {
     int update(Computer computer);
 
     int upload(@Param("image") String image);
+
+    List<ForegroundMainListDTO> query(String info);
+
 }

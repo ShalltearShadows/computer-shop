@@ -10,6 +10,9 @@
 
     <el-card>
       <el-row :gutter="20">
+        <el-col :span="4"><el-avatar shape="square" :size="120" fit="fill" :src="imageUrl"></el-avatar></el-col>
+      </el-row>
+      <el-row :gutter="20">
         <el-col :span="4"><el-tag effect="plain">ID</el-tag></el-col>
         <el-col :span="4"><el-tag effect="plain">{{ infoForm.id }}</el-tag></el-col>
       </el-row>
@@ -30,6 +33,7 @@
     <el-card>
       <el-button type="primary" @click="infoDialogVisible = true">修改信息</el-button>
       <el-button type="primary" @click="passwordDialogVisible = true">修改密码</el-button>
+      <el-button type="primary" @click="avatarDialogVisible = true">修改头像</el-button>
     </el-card>
 
     <!--修改信息对话框-->
@@ -73,12 +77,28 @@
             </span>
     </el-dialog>
 
+    <el-dialog title="修改头像" :visible.sync="avatarDialogVisible" width="20%" @close="avatarDialogClosed">
+      <el-upload
+          class="avatar-uploader el-upload"
+          :action="uploadURL"
+          :show-file-list="false"
+          :on-success="handleSuccess"
+          :headers="headerObj">
+        <el-tooltip class="item" effect="dark" content="点击图片进行修改" placement="top">
+          <el-image v-if="imageUrl" :src="imageUrl" class="avatar el-upload"></el-image>
+          <i v-else class="el-icon-plus avatar-uploader-icon el-upload"></i>
+        </el-tooltip>
+
+      </el-upload>
+    </el-dialog>
+
 
 
   </div>
 </template>
 
 <script>
+import Bus from "../../router/bus"
 export default {
   name: "info",
   data() {
@@ -96,11 +116,20 @@ export default {
       },
       infoDialogVisible:false,
       passwordDialogVisible:false,
+      avatarDialogVisible:false,
+      avatar:'',
+      uploadURL: 'http://localhost:8080/user/upload',
+      imageUrl: '',
+      headerObj: {
+        Authorization: window.sessionStorage.getItem('token')
+      },
     }
   },
   created() {
     this.getInfo()
     this.passwordForm.id = this.infoForm.id
+
+    this.imageUrl = window.sessionStorage.getItem('avatar')
   },
   methods:{
     async getInfo(){
@@ -112,10 +141,6 @@ export default {
       this.infoForm.address = res.data.address
     },
     infoDialogClosed(){
-      this.infoForm.id = ''
-      this.infoForm.username = ''
-      this.infoForm.mobile = ''
-      this.infoForm.address = ''
       this.infoDialogVisible = false
     },
     async alterInfo(){
@@ -128,6 +153,9 @@ export default {
       this.passwordForm.p2 = ''
       this.passwordDialogVisible = false
     },
+    avatarDialogClosed(){
+      this.avatarDialogVisible = false
+    },
     async alterPassword(){
 
       if (this.passwordForm.p1!==this.passwordForm.p2){
@@ -138,6 +166,20 @@ export default {
 
       this.passwordDialogClosed()
     },
+    handleSuccess(response){
+      if (response.code!==200){
+        this.$message.error("上传失败")
+      }
+
+      var avatar = "data:image/png;base64," + response.data
+      window.sessionStorage.setItem("avatar", avatar)
+      this.imageUrl = avatar
+
+      this.avatarDialogVisible = false
+
+      Bus.$emit("getAvatar");
+    },
+
   }
 }
 </script>

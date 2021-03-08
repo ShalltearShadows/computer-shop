@@ -35,4 +35,6 @@ public interface ComputerMapper {
 
     int upload(@Param("image") String image);
 
+    List<ForegroundMainListDTO> query(String info);
+
 }

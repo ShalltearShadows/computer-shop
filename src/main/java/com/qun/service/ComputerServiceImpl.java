@@ -39,7 +39,7 @@ public class ComputerServiceImpl implements ComputerService{
 
     @Override
     public Computer get(long id) {
-        return null;
+        return computerMapper.get(id);
     }
 
     @Override
@@ -60,5 +60,10 @@ public class ComputerServiceImpl implements ComputerService{
     @Override
     public int upload(String image) {
         return computerMapper.upload(image);
+    }
+
+    @Override
+    public List<ForegroundMainListDTO> query(String info) {
+        return computerMapper.query(info);
     }
 }
