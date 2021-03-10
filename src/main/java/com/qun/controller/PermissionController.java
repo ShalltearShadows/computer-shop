@@ -10,8 +10,8 @@ package com.qun.controller;
 
 import com.qun.common.lang.Result;
 import com.qun.entity.dto.*;
-import com.qun.entity.po.Permission;
-import com.qun.entity.po.Role;
+import com.qun.entity.dao.Permission;
+import com.qun.entity.dao.Role;
 import com.qun.service.PermissionService;
 import com.qun.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

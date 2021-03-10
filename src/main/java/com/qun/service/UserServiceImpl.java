@@ -9,7 +9,7 @@ package com.qun.service;
 
 import com.qun.entity.dto.UserDTO;
 import com.qun.mapper.UserMapper;
-import com.qun.entity.po.User;
+import com.qun.entity.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

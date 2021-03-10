@@ -5,12 +5,11 @@
  * @Date: 2020/11/29
  * @Time: 15:45
  */
-package com.qun.entity.po;
+package com.qun.entity.dao;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 

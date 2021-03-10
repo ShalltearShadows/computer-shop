@@ -8,7 +8,7 @@
 package com.qun.service;
 
 import com.qun.entity.dto.ForegroundMainListDTO;
-import com.qun.entity.po.Computer;
+import com.qun.entity.dao.Computer;
 import com.qun.mapper.ComputerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

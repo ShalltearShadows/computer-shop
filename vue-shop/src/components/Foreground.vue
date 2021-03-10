@@ -14,13 +14,23 @@
           <!-- 购物车 -->
           <el-col :span="12">
             <el-dropdown>
-            <span class="el-dropdown-link">
-              <el-badge style="margin-right: 20px; height: 16px" :hidden="count===0?true:false" :value="count" class="item">
-                <el-link class="el-link-icon" icon="el-icon-shopping-cart-1" :underline="false" href="#"></el-link>
-              </el-badge>
-            </span>
+              <span class="el-dropdown-link">
+                <el-badge style="margin-right: 20px; height: 16px" :hidden="count===0?true:false" :value="count" class="item">
+                  <el-link class="el-link-icon" icon="el-icon-shopping-cart-1" :underline="false" href="#"></el-link>
+                </el-badge>
+              </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>1</el-dropdown-item>
+                <el-dropdown-item v-for="item in cart">
+                  <el-row>
+                    <el-col>
+                      <el-image style="width: 50px; height: 50px" fit="fill" :src="item.url">
+                        <div slot="error" class="image-slot">
+                          <i class="el-icon-picture-outline"></i>
+                        </div>
+                      </el-image>
+                    </el-col>
+                  </el-row>
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
@@ -115,6 +125,7 @@ export default {
       fmlData: [],
       infoDialogVisible: false,
       editForm: {
+        goodId:'',
         brand: '',
         cpu: '',
         gpu: '',
@@ -132,7 +143,7 @@ export default {
     }
   },
   created() {
-    this.avatar = window.sessionStorage.getItem('avatar')
+    this.avatar = window.localStorage.getItem('avatar')
   },
   methods: {
     getFML() {
@@ -144,10 +155,12 @@ export default {
         this.num++
       });
     },
+    async getAllOrder(){
+      const {data: res} = await this.$http.get("/order/all")
+    },
     async showDialog(id) {
-      //TODO 获取电脑信息
       const {data: res} = await this.$http.get('good/' + id)
-
+      this.editForm.goodId = id
       this.editForm.brand = res.data.brand
       this.editForm.cpu = res.data.cpu
       this.editForm.gpu = res.data.gpu
@@ -168,9 +181,16 @@ export default {
       this.num = 1
       this.getFML()
     },
-    addCart() {
-      this.cart.push(this.editForm)
+    async addCart() {
+      var good = this.editForm
+      var total = this.inputCount * good.price
+      var order = {goodId:good.goodId,count:this.inputCount,time: new Date(),total:total}
+
+      const {data: res} = await this.$http.post("/order/add",order)
+
+      this.cart.push(order)
       this.count = this.cart.length
+      this.infoDialogVisible = false
     },
     async queryInfo(){
       const {data:res} = await this.$http.get('good/query',{params:{info:this.input}})
@@ -178,11 +198,10 @@ export default {
     },
     quit() {
       //删除token
-      window.sessionStorage.removeItem('token');
-      window.sessionStorage.removeItem('avatar');
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('avatar');
       this.$store.commit("REMOVE_INFO")
-      //跳转到登录页
-      this.$router.push('/foreground')
+      this.avatar = null
     },
     addCount(stock){
       if (stock>this.inputCount){
@@ -195,8 +214,10 @@ export default {
       if (this.inputCount>1){
         this.inputCount--
       }
-    }
-  }
+    },
+
+  },
+
 }
 </script>
 

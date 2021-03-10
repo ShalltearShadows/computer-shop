@@ -3,7 +3,7 @@
     <!-- 页面头部区 -->
     <el-header>
       <div>
-        <img src="../assets/star.png">
+        <img src="../assets/star.png" @click="welcome">
         <span>后台管理系统</span>
       </div>
 
@@ -84,8 +84,8 @@ export default {
   methods: {
     quit() {
       //删除token
-      window.sessionStorage.removeItem('token');
-      window.sessionStorage.removeItem('avatar');
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('avatar');
       this.$store.commit("REMOVE_INFO")
       //跳转到登录页
       this.$router.push('/foreground')
@@ -102,10 +102,13 @@ export default {
     getAvatar() {
       this.$http.get('/user/avatar').then(res => {
         var avatar = "data:image/png;base64," + res.data.data
-        window.sessionStorage.setItem("avatar", avatar)
+        window.localStorage.setItem("avatar", avatar)
         this.avatar = avatar
       })
     },
+    welcome(){
+      this.$router.push("/welcome")
+    }
 
   },
   mounted() {

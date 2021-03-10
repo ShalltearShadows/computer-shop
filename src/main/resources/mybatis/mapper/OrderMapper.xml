@@ -12,34 +12,16 @@
         select * from `order` where id = #{id}
     </select>
 
-    <insert id="add" parameterType="Order">
-        insert into `order`(price, payment, deliver, time, address)
-            VALUES(#{price},#{payment},#{deliver},#{time},#{address})
+    <insert id="add" parameterType="CartOrderVO" useGeneratedKeys="true" keyProperty="id">
+        insert into `order`(user_id,good_id, count, time, total, pay)
+            VALUES(#{userId},#{goodId},#{count},#{time},#{total},0)
     </insert>
 
     <delete id="delete">
         delete from `order` where id = #{id}
     </delete>
 
-    <update id="update" parameterType="Order">
-        update `order`
-        <set>
-            <if test="price != null">
-                price = #{price}
-            </if>
-            <if test="payment != null">
-                payment = #{payment}
-            </if>
-            <if test="deliver != null">
-                deliver = #{deliver}
-            </if>
-            <if test="time != null">
-                time = #{time}
-            </if>
-            <if test="address != null">
-                address = #{address}
-            </if>
-        </set>
-        where id = #{id}
+    <update id="update">
+        update `order` set pay = #{pay} where id = #{id}
     </update>
 </mapper>

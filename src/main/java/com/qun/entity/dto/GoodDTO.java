@@ -7,7 +7,7 @@
  */
 package com.qun.entity.dto;
 
-import com.qun.entity.po.Computer;
+import com.qun.entity.dao.Computer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -23,7 +23,7 @@ const GoodsList = () => import(/* webpackChunkName: "Cate_Params_GoodsList" */ '
 
 
 const Add = () => import(/* webpackChunkName: "Add_Order_Report" */ '../views/goods/Add');
-const Order = () => import(/* webpackChunkName: "Add_Order_Report" */ '../views/order/Order');
+const OrderList = () => import(/* webpackChunkName: "Add_Order_Report" */ '../views/order/Order');
 const Report = () => import(/* webpackChunkName: "Add_Order_Report" */ '../views/report/Report');
 
 Vue.use(VueRouter);
@@ -53,7 +53,8 @@ const router = new VueRouter({
                 {path: '/categories', component: Cate},
                 //添加商品
                 {path: '/goods/add', component: Add},
-                {path: '/orders', component: Order},
+                //订单列表
+                {path: '/order/list', component: OrderList},
                 {path: '/reports', component: Report},
                 //个人管理
                 {path: '/indi/info', component: INFO},
@@ -69,7 +70,7 @@ router.beforeEach((to, from, next) => {
     }
 
     //从sessionstorage中获取到保存的token值
-    const tokenstr = window.sessionStorage.getItem('token');
+    const tokenstr = window.localStorage.getItem('token');
     //没有token，强制跳转到登录页
     if (!tokenstr) {
         return next('/login');

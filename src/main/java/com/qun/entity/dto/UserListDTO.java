@@ -7,7 +7,7 @@
  */
 package com.qun.entity.dto;
 
-import com.qun.entity.po.User;
+import com.qun.entity.dao.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

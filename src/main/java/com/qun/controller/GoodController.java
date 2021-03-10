@@ -10,7 +10,7 @@ package com.qun.controller;
 import com.qun.common.lang.Result;
 import com.qun.entity.dto.ForegroundMainListDTO;
 import com.qun.entity.dto.GoodDTO;
-import com.qun.entity.po.Computer;
+import com.qun.entity.dao.Computer;
 import com.qun.service.ComputerService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;

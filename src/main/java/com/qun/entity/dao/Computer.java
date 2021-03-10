@@ -5,7 +5,7 @@
  * @Date: 2020/11/29
  * @Time: 15:44
  */
-package com.qun.entity.po;
+package com.qun.entity.dao;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

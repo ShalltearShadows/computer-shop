@@ -7,14 +7,12 @@
  */
 package com.qun.entity.dto;
 
-import com.qun.entity.po.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Data
 @Accessors(chain = true)

@@ -51,7 +51,7 @@ public class ShiroConfig {
         return sessionManager;
     }
 
-    @Bean
+
     public SessionsSecurityManager securityManager(AccountRealm accountRealm, SessionManager sessionManager, RedisCacheManager redisCacheManager) {
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(accountRealm);

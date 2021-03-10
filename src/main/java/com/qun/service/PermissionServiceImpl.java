@@ -9,14 +9,13 @@ package com.qun.service;
 
 import com.qun.entity.dto.PermDTO;
 import com.qun.entity.dto.RoleDTO;
-import com.qun.entity.po.Permission;
+import com.qun.entity.dao.Permission;
 import com.qun.entity.dto.Menu;
 import com.qun.mapper.PermissionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component

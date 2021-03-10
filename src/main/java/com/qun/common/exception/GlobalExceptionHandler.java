@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = RuntimeException.class)
     public Result handler(RuntimeException e){
-        log.error("===运行时异常===");
+        log.error("===运行时异常===",e);
         return Result.fail("服务器出错,请联系管理员");
     }
 

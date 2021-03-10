@@ -8,7 +8,7 @@
 package com.qun.mapper;
 
 import com.qun.entity.dto.UserDTO;
-import com.qun.entity.po.User;
+import com.qun.entity.dao.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

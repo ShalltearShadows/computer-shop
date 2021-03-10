@@ -63,16 +63,24 @@ export default {
 
           this.$message.success("登陆成功")
           //将服务器返回的token存储到sessionStorage
-          window.sessionStorage.setItem("token", res.headers.authorization)
+          window.localStorage.setItem("token", res.headers.authorization)
 
           this.$store.commit("SET_TOKEN", res.headers.authorization)
           this.$store.commit("SET_USERINFO", res.data.data)
+          this.getAvatar()
 
-          // 通过编程式导航跳转到后台主页，路由地址是 /home
-          this.$router.push('/home')
         });
       });
 
+    },
+    async getAvatar() {
+      const {data:res} = await this.$http.get('/user/avatar')
+
+      var avatar = "data:image/png;base64," + res.data
+      window.localStorage.setItem("avatar", avatar)
+
+      // 通过编程式导航跳转到前台主页
+      this.$router.push('/foreground')
     },
 
   }

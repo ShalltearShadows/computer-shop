@@ -8,9 +8,9 @@
 package com.qun.shiro;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.qun.entity.po.Permission;
-import com.qun.entity.po.Role;
-import com.qun.entity.po.User;
+import com.qun.entity.dao.Permission;
+import com.qun.entity.dao.Role;
+import com.qun.entity.dao.User;
 import com.qun.service.PermissionService;
 import com.qun.service.RoleServiceImpl;
 import com.qun.service.UserService;
@@ -25,7 +25,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
