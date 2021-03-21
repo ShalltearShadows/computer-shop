@@ -1,4 +1,4 @@
-package com.qun.entity.dto;
+package com.qun.pojo.dto;
 
 import lombok.Data;
 

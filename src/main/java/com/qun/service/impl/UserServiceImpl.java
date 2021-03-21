@@ -5,18 +5,19 @@
  * @Date: 2020/12/1
  * @Time: 15:45
  */
-package com.qun.service;
+package com.qun.service.impl;
 
-import com.qun.entity.dto.UserDTO;
+import com.qun.pojo.dto.UserDTO;
 import com.qun.mapper.UserMapper;
-import com.qun.entity.dao.User;
+import com.qun.pojo.entity.User;
+import com.qun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;

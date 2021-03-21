@@ -8,9 +8,9 @@
 package com.qun.controller;
 
 import cn.hutool.core.map.MapUtil;
-import com.qun.entity.dto.LoginDTO;
+import com.qun.pojo.dto.LoginDTO;
 import com.qun.common.lang.Result;
-import com.qun.entity.dao.User;
+import com.qun.pojo.entity.User;
 
 import com.qun.service.UserService;
 

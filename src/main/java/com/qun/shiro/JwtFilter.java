@@ -12,6 +12,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.qun.common.lang.Result;
 import com.qun.util.JwtUtils;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExpiredCredentialsException;
@@ -31,6 +32,7 @@ import java.io.IOException;
 
 
 @Component
+@Slf4j
 public class JwtFilter extends AuthenticatingFilter {
 
     //JwtUtils使用@Component注解方式注入（需要配置如下代码）
@@ -77,6 +79,7 @@ public class JwtFilter extends AuthenticatingFilter {
             System.out.println(jwtUtils==null?"JwtUtils又在JwtFilter为NULL":"");
             Claims claim = jwtUtils.getClaimsByToken(token);
             if (claim==null||jwtUtils.isTokenExpired(claim.getExpiration())){
+                log.info("===>token已失效");
                 throw new ExpiredCredentialsException("token已失效，请重新登录");
             }
             //执行登录

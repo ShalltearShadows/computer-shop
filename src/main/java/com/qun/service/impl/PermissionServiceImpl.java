@@ -5,13 +5,14 @@
  * @Date: 2020/12/6
  * @Time: 14:54
  */
-package com.qun.service;
+package com.qun.service.impl;
 
-import com.qun.entity.dto.PermDTO;
-import com.qun.entity.dto.RoleDTO;
-import com.qun.entity.dao.Permission;
-import com.qun.entity.dto.Menu;
+import com.qun.pojo.dto.PermDTO;
+import com.qun.pojo.dto.RoleDTO;
+import com.qun.pojo.entity.Permission;
+import com.qun.pojo.dto.Menu;
 import com.qun.mapper.PermissionMapper;
+import com.qun.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PermissionServiceImpl implements PermissionService{
+public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
     private PermissionMapper permissionMapper;

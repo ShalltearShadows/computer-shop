@@ -44,13 +44,7 @@ Axios.interceptors.response.use (response => {
     console.log(response.config.url)
     console.log("====================================================")
 
-    if (response.data.code===200){
-        return response
-    }
-
-    ElementUI.Message.error(response.data.msg)
-    return Promise.reject(response.data)
-
+    return response
 },error => {
     // 处理的是全局异常类返回的错误
     console.log("=====================error======================")
@@ -60,7 +54,7 @@ Axios.interceptors.response.use (response => {
 
     ElementUI.Message.error(error.response.data.msg)
 
-    return Promise.reject(error)
+    return null
 });
 
 // 导入字体图标
@@ -97,7 +91,12 @@ Vue.filter('dateFormat',function (originVal) {
 
     return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
 });
-
+Vue.filter('moneyFormat',function (origin) {
+    if (typeof origin === 'undefined') {
+        return
+    }
+    return origin.toFixed(2)+'￥'
+})
 const Bus = new Vue()
 
 new Vue({

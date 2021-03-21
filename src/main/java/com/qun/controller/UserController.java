@@ -8,9 +8,9 @@
 package com.qun.controller;
 
 import com.qun.common.lang.Result;
-import com.qun.entity.dto.*;
-import com.qun.entity.dto.Menu;
-import com.qun.entity.dao.User;
+import com.qun.pojo.dto.*;
+import com.qun.pojo.dto.Menu;
+import com.qun.pojo.entity.User;
 import com.qun.service.PermissionService;
 import com.qun.service.RoleService;
 import com.qun.service.UserService;

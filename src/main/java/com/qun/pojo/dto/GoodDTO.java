@@ -5,9 +5,9 @@
  * @Date: 2020/12/13
  * @Time: 17:18
  */
-package com.qun.entity.dto;
+package com.qun.pojo.dto;
 
-import com.qun.entity.dao.Computer;
+import com.qun.pojo.entity.Computer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -191,6 +191,7 @@ export default {
       this.cart.push(order)
       this.count = this.cart.length
       this.infoDialogVisible = false
+      this.inputCount = 1
     },
     async queryInfo(){
       const {data:res} = await this.$http.get('good/query',{params:{info:this.input}})

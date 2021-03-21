@@ -7,8 +7,8 @@
  */
 package com.qun.mapper;
 
-import com.qun.entity.dto.ForegroundMainListDTO;
-import com.qun.entity.dao.Computer;
+import com.qun.pojo.dto.ForegroundMainListDTO;
+import com.qun.pojo.entity.Computer;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

@@ -74,6 +74,7 @@ public class JwtUtils {
      * token 是否过期
      */
     public boolean isTokenExpired(Date expiration){
+        log.info("====>正在检查token是否已过期");
         return expiration.before(new Date());
     }
 

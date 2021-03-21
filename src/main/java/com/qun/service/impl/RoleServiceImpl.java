@@ -5,14 +5,15 @@
  * @Date: 2020/12/6
  * @Time: 14:45
  */
-package com.qun.service;
+package com.qun.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.druid.util.StringUtils;
-import com.qun.entity.dto.PermDTO;
-import com.qun.entity.dto.RoleDTO;
-import com.qun.entity.dao.Role;
+import com.qun.pojo.dto.PermDTO;
+import com.qun.pojo.dto.RoleDTO;
+import com.qun.pojo.entity.Role;
 import com.qun.mapper.RoleMapper;
+import com.qun.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ import java.util.List;
 import static org.apache.shiro.util.StringUtils.split;
 
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;

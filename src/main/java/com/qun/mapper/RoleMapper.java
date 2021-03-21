@@ -7,7 +7,7 @@
  */
 package com.qun.mapper;
 
-import com.qun.entity.dao.Role;
+import com.qun.pojo.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

@@ -20,7 +20,7 @@ spring:
 
 # mybatis
 mybatis:
-  type-aliases-package: com.qun.entity
+  type-aliases-package: com.qun.pojo
   mapper-locations: classpath:mybatis/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true #驼峰命名

@@ -8,9 +8,9 @@
 package com.qun.controller;
 
 import com.qun.common.lang.Result;
-import com.qun.entity.dto.ForegroundMainListDTO;
-import com.qun.entity.dto.GoodDTO;
-import com.qun.entity.dao.Computer;
+import com.qun.pojo.dto.ForegroundMainListDTO;
+import com.qun.pojo.dto.GoodDTO;
+import com.qun.pojo.entity.Computer;
 import com.qun.service.ComputerService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;

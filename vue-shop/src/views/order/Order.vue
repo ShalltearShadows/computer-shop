@@ -11,8 +11,8 @@
     <el-card>
       <el-row>
         <el-col :span="6">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input placeholder="请输入内容" v-model="queryInfo.query">
+            <el-button slot="append" icon="el-icon-search" @click="getOrderList"></el-button>
           </el-input>
         </el-col>
       </el-row>
@@ -22,39 +22,59 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="订单编号" prop="id"></el-table-column>
         <el-table-column label="用户账号" prop="userId"></el-table-column>
-        <el-table-column label="商品账号" prop="goodId"></el-table-column>
+        <el-table-column label="商品编号" prop="goodId"></el-table-column>
         <el-table-column label="商品数量" prop="count"></el-table-column>
-        <el-table-column label="下单时间" prop="time"></el-table-column>
+        <el-table-column label="下单时间">
+          <template slot-scope="scope">
+            {{scope.row.time | dateFormat}}
+          </template>
+        </el-table-column>
         <el-table-column label="是否付款">
           <template slot-scope="scope">
-            <el-tag type="danger" size="mini" v-if="scope.row.pay">未付款</el-tag>
+            <el-tag type="danger" size="mini" v-if="scope.row.pay===0">未付款</el-tag>
             <el-tag type="success" size="mini" v-else>已付款</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="总价" prop="total"></el-table-column>
-
+        <el-table-column label="总价">
+          <template slot-scope="scope">
+            {{scope.row.total|moneyFormat}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
-          <template>
-            <el-button type="primary" size="mini" icon="el-icon-edit" @click="infoDialogVisible = true"></el-button>
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="toPay(scope.row.goodId)">付款</el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page="queryInfo.pagenum" :page-sizes="[5, 10, 15, 20]"
-                     :page-size="queryInfo.pagesize" layout="total, sizes, prev, pager, next, jumper"
-                     :total="pageTotal"></el-pagination>
+                     :current-page="queryInfo.pagenum" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pagesize"
+                     layout="total, sizes, prev, pager, next, jumper" :total="pageTotal" background></el-pagination>
     </el-card>
 
-    <!-- 编辑对话框 -->
-    <el-dialog title="修改地址" :visible.sync="infoDialogVisible" width="50%" @close="infoDialogClosed">
-      <el-form :model="infoForm" :rules="infoFormRules" ref="infoFormRef" label-width="100px">
+    <!--商品信息框-->
+    <el-dialog title="详细信息" :visible.sync="infoDialogVisible" width="50%" @close="infoDialogClosed">
+      <div style="display: flex">
+        <el-image style="width: 500px; height: auto;margin-left: 10px" :src="infoForm.url" fit="fill"></el-image>
 
-      </el-form>
+        <div class="dialog-main">
+          品牌：{{infoForm.brand}} <br>
+          CPU： {{infoForm.cpu}} <br>
+          GPU： {{infoForm.gpu}} <br>
+          分辨率： {{infoForm.screen}} <br>
+          内存： {{infoForm.memory}} <br>
+          硬盘： {{infoForm.hardDisk}} <br>
+          库存： {{infoForm.stock}} <br>
+          价格： {{infoForm.price|moneyFormat}} <br>
+        </div>
+
+      </div>
+
+      <!-- 按钮区 -->
       <span slot="footer" class="dialog-footer">
-        <el-button @click=" ">取 消</el-button>
-        <el-button type="primary" @click="infoDialogVisible = false">确 定</el-button>
+          <el-button @click="infoDialogVisible = false">取 消</el-button>
+          <el-button type="success" @click="pay">支 付</el-button>
       </span>
     </el-dialog>
 
@@ -70,16 +90,13 @@ export default {
       queryInfo: {
         query: '',
         pagenum: 1,
-        pagesize: 10
+        pagesize: 5
       },
       pageTotal: 0,
       // 订单列表
       orderList: [],
       infoDialogVisible: false,
-      infoForm:{
-
-      },
-      infoFormRules:[]
+      infoForm:{},
     }
   },
   created() {
@@ -87,16 +104,13 @@ export default {
   },
   methods: {
     async getOrderList() {
-      // const {data: res} = await this.$http.get('/order/all', {
-      //   params: this.queryInfo
-      // });
-      const {data: res} = await this.$http.get('/order/all');
+      const {data: res} = await this.$http.get('/order/all',{params: this.queryInfo});
       if (res.code !== 200) {
         return this.$message.error('获取订单列表失败！')
       }
 
-      this.orderList = res.data
-      this.pageTotal = this.orderList.length
+      this.orderList = res.data.orders
+      this.pageTotal = res.data.total
     },
     // 分页
     handleSizeChange(newSize) {
@@ -108,7 +122,7 @@ export default {
       this.getOrderList()
     },
     infoDialogClosed(){
-
+      this.infoForm = {}
     },
 
     // 通过Id删除
@@ -132,6 +146,25 @@ export default {
       this.$message.success('删除成功！');
 
     },
+    async toPay(id){
+      const {data: res} = await this.$http.get('good/' + id)
+      this.infoForm.goodId = id
+      this.infoForm.brand = res.data.brand
+      this.infoForm.cpu = res.data.cpu
+      this.infoForm.gpu = res.data.gpu
+      // this.editForm.url = res.data.url
+      this.infoForm.url = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+      this.infoForm.screen = res.data.screen
+      this.infoForm.memory = res.data.memory
+      this.infoForm.hardDisk = res.data.hardDisk
+      this.infoForm.price = res.data.price
+      this.infoForm.stock = res.data.stock
+
+      this.infoDialogVisible = true
+    },
+    pay() {
+      //TODO 支付
+    }
   }
 }
 </script>

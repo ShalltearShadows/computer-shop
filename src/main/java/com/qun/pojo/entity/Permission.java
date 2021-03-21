@@ -5,7 +5,7 @@
  * @Date: 2020/11/29
  * @Time: 15:45
  */
-package com.qun.entity.dao;
+package com.qun.pojo.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -14,8 +14,12 @@ import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
-public class Role implements Serializable {
-    private int id;
+public class Permission implements Serializable {
+    private int permId;
+    private int parentId;
     private String name;
-    private String perms;
+    private String perm;
+    private String icon;
+    private int level;
+
 }

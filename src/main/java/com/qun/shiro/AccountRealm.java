@@ -8,11 +8,11 @@
 package com.qun.shiro;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.qun.entity.dao.Permission;
-import com.qun.entity.dao.Role;
-import com.qun.entity.dao.User;
+import com.qun.pojo.entity.Permission;
+import com.qun.pojo.entity.Role;
+import com.qun.pojo.entity.User;
 import com.qun.service.PermissionService;
-import com.qun.service.RoleServiceImpl;
+import com.qun.service.impl.RoleServiceImpl;
 import com.qun.service.UserService;
 import com.qun.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;

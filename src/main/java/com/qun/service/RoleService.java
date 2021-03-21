@@ -7,9 +7,9 @@
  */
 package com.qun.service;
 
-import com.qun.entity.dto.PermDTO;
-import com.qun.entity.dto.RoleDTO;
-import com.qun.entity.dao.Role;
+import com.qun.pojo.dto.PermDTO;
+import com.qun.pojo.dto.RoleDTO;
+import com.qun.pojo.entity.Role;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@
  * @Date: 2020/12/9
  * @Time: 18:03
  */
-package com.qun.entity.dto;
+package com.qun.pojo.dto;
 
 import lombok.Data;
 

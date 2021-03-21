@@ -7,8 +7,8 @@
  */
 package com.qun.service;
 
-import com.qun.entity.dto.UserDTO;
-import com.qun.entity.dao.User;
+import com.qun.pojo.dto.UserDTO;
+import com.qun.pojo.entity.User;
 
 import java.util.List;
 

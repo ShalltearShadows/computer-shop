@@ -6,6 +6,14 @@
 
     <select id="getAll" resultType="Order">
         select * from `order`
+        <where>
+            <if test="query != null">
+                id like concat('%',#{query},'%') or
+                user_id like concat('%',#{query},'%') or
+                good_id like concat('%',#{query},'%')
+            </if>
+        </where>
+        limit #{start},#{num}
     </select>
 
     <select id="get" resultType="Order">
@@ -24,4 +32,16 @@
     <update id="update">
         update `order` set pay = #{pay} where id = #{id}
     </update>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from `order`
+        <where>
+            <if test="query != null">
+                id like concat('%',#{query},'%') or
+                user_id like concat('%',#{query},'%') or
+                good_id like concat('%',#{query},'%')
+            </if>
+        </where>
+        limit #{start},#{num}
+    </select>
 </mapper>

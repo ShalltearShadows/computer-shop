@@ -68,12 +68,6 @@ public class GlobalExceptionHandler {
         return Result.fail(e.getMessage());
     }
 
-
-
-
-
-
-
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)
     public Result handler(MaxUploadSizeExceededException e){
@@ -88,7 +82,11 @@ public class GlobalExceptionHandler {
         return Result.fail(401,e.getMessage(),null);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
+
+
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = RuntimeException.class)
     public Result handler(RuntimeException e){
         log.error("===运行时异常===",e);

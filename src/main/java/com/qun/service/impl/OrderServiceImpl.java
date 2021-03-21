@@ -1,8 +1,9 @@
-package com.qun.service;
+package com.qun.service.impl;
 
-import com.qun.entity.vo.CartOrderVO;
-import com.qun.entity.dao.Order;
+import com.qun.pojo.vo.CartOrderVO;
+import com.qun.pojo.entity.Order;
 import com.qun.mapper.OrderMapper;
+import com.qun.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     @Override
-    public List<Order> getAll() {
-        return orderMapper.getAll();
+    public List<Order> getAll(int start,int num,String query) {
+        return orderMapper.getAll(start,num,query);
     }
 
     @Override
@@ -37,5 +38,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int update(Order order) {
         return orderMapper.update(order);
+    }
+
+    @Override
+    public int getTotal(int start,int num,String query) {
+        return orderMapper.getTotal(start, num, query);
     }
 }

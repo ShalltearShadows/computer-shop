@@ -5,11 +5,12 @@
  * @Date: 2020/12/13
  * @Time: 17:05
  */
-package com.qun.service;
+package com.qun.service.impl;
 
-import com.qun.entity.dto.ForegroundMainListDTO;
-import com.qun.entity.dao.Computer;
+import com.qun.pojo.dto.ForegroundMainListDTO;
+import com.qun.pojo.entity.Computer;
 import com.qun.mapper.ComputerMapper;
+import com.qun.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 
 @Service
-public class ComputerServiceImpl implements ComputerService{
+public class ComputerServiceImpl implements ComputerService {
 
     @Autowired
     private ComputerMapper computerMapper;
