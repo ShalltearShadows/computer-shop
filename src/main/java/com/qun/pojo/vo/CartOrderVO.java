@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 public class CartOrderVO implements Serializable {
     private Long id;
     private Long userId;
+    private String brand;
     private Long goodId;
     private Integer count;
     private Timestamp time;

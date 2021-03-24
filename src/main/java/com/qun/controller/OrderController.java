@@ -7,12 +7,14 @@ import com.qun.pojo.entity.User;
 import com.qun.pojo.vo.CartOrderVO;
 import com.qun.service.OrderService;
 import com.qun.util.ShiroUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -46,5 +48,16 @@ public class OrderController {
     public Result deleteOrder(@PathVariable("id") Long id){
         orderService.delete(id);
         return Result.success("success");
+    }
+
+    @PostMapping("/pay")
+    public Result pay(@RequestBody CartOrderVO orderVO){
+        return orderService.pay(orderVO);
+    }
+
+    @PostMapping("/update")//返回给支付宝
+    public String update(){
+
+        return "success";
     }
 }

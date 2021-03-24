@@ -108,6 +108,8 @@
       </el-dialog>
     </el-main>
 
+    <div v-html="alipayWap" ref="alipayWap"></div>
+
     <el-footer>
       <p>Copyright© 2021 李群</p>
     </el-footer>
@@ -140,6 +142,7 @@ export default {
       avatar:null,
       cart:[],
       inputCount:1,
+      alipayWap:''
     }
   },
   created() {

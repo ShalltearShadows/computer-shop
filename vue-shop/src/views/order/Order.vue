@@ -78,6 +78,8 @@
       </span>
     </el-dialog>
 
+    <div v-html="alipayWap" ref="alipayWap"></div>
+
   </div>
 </template>
 
@@ -97,6 +99,7 @@ export default {
       orderList: [],
       infoDialogVisible: false,
       infoForm:{},
+      alipayWap:''
     }
   },
   created() {
@@ -159,6 +162,14 @@ export default {
       this.infoForm.hardDisk = res.data.hardDisk
       this.infoForm.price = res.data.price
       this.infoForm.stock = res.data.stock
+
+
+      const {data: html} = await this.$http.post("/order/pay",this.infoForm)
+
+      this.alipayWap = html.data;
+      this.$nextTick(() => {
+        console.log(this.$refs.alipayWap.children[0].submit())
+      })
 
       this.infoDialogVisible = true
     },

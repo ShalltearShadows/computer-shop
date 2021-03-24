@@ -1,5 +1,6 @@
 package com.qun.service;
 
+import com.qun.common.lang.Result;
 import com.qun.pojo.vo.CartOrderVO;
 import com.qun.pojo.entity.Order;
 
@@ -12,4 +13,5 @@ public interface OrderService {
     int delete(long id);
     int update(Order order);
     int getTotal(int start,int num,String query);
+    Result pay(CartOrderVO cartOrderVO);
 }
