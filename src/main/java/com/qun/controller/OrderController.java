@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,6 @@ public class OrderController {
     @PostMapping("/add")
     public Result addCart(@RequestBody CartOrderVO cartOrderVO){
         cartOrderVO.setUserId(ShiroUtil.getProfile().getId());
-
         orderService.add(cartOrderVO);
         return Result.success(cartOrderVO.getId());
     }
@@ -36,7 +36,8 @@ public class OrderController {
         int start = (num-1)*size;
 
         List<Order> all = orderService.getAll(start, size, "".equals(query)?null:query);
-        int total = orderService.getTotal(start, size, "".equals(query)?null:query);
+
+        int total = orderService.getTotal("".equals(query)?null:query);
         Map<Object, Object> map = MapUtil.builder()
                 .put("orders", all)
                 .put("total", total)
@@ -56,7 +57,12 @@ public class OrderController {
     }
 
     @PostMapping("/update")//返回给支付宝
-    public String update(){
+    public String update(HttpServletRequest request){
+        String out_trade_no = request.getParameter("out_trade_no");
+
+        Order order = new Order();
+        order.setId(Long.valueOf(out_trade_no)).setPay(1);
+        orderService.update(order);
 
         return "success";
     }

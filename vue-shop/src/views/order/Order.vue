@@ -42,7 +42,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="toPay(scope.row.goodId)">付款</el-button>
+            <el-button type="primary" v-show="scope.row.pay===0" size="mini" @click="toPay(scope.row)">$ 付款</el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -52,31 +52,6 @@
                      :current-page="queryInfo.pagenum" :page-sizes="[5, 10, 15, 20]" :page-size="queryInfo.pagesize"
                      layout="total, sizes, prev, pager, next, jumper" :total="pageTotal" background></el-pagination>
     </el-card>
-
-    <!--商品信息框-->
-    <el-dialog title="详细信息" :visible.sync="infoDialogVisible" width="50%" @close="infoDialogClosed">
-      <div style="display: flex">
-        <el-image style="width: 500px; height: auto;margin-left: 10px" :src="infoForm.url" fit="fill"></el-image>
-
-        <div class="dialog-main">
-          品牌：{{infoForm.brand}} <br>
-          CPU： {{infoForm.cpu}} <br>
-          GPU： {{infoForm.gpu}} <br>
-          分辨率： {{infoForm.screen}} <br>
-          内存： {{infoForm.memory}} <br>
-          硬盘： {{infoForm.hardDisk}} <br>
-          库存： {{infoForm.stock}} <br>
-          价格： {{infoForm.price|moneyFormat}} <br>
-        </div>
-
-      </div>
-
-      <!-- 按钮区 -->
-      <span slot="footer" class="dialog-footer">
-          <el-button @click="infoDialogVisible = false">取 消</el-button>
-          <el-button type="success" @click="pay">支 付</el-button>
-      </span>
-    </el-dialog>
 
     <div v-html="alipayWap" ref="alipayWap"></div>
 
@@ -149,22 +124,9 @@ export default {
       this.$message.success('删除成功！');
 
     },
-    async toPay(id){
-      const {data: res} = await this.$http.get('good/' + id)
-      this.infoForm.goodId = id
-      this.infoForm.brand = res.data.brand
-      this.infoForm.cpu = res.data.cpu
-      this.infoForm.gpu = res.data.gpu
-      // this.editForm.url = res.data.url
-      this.infoForm.url = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-      this.infoForm.screen = res.data.screen
-      this.infoForm.memory = res.data.memory
-      this.infoForm.hardDisk = res.data.hardDisk
-      this.infoForm.price = res.data.price
-      this.infoForm.stock = res.data.stock
+    async toPay(order){
 
-
-      const {data: html} = await this.$http.post("/order/pay",this.infoForm)
+      const {data: html} = await this.$http.post("/order/pay",order)
 
       this.alipayWap = html.data;
       this.$nextTick(() => {

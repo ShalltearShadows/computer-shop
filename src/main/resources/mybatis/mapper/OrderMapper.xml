@@ -29,7 +29,7 @@
         delete from `order` where id = #{id}
     </delete>
 
-    <update id="update">
+    <update id="update" parameterType="Order">
         update `order` set pay = #{pay} where id = #{id}
     </update>
 
@@ -42,6 +42,5 @@
                 good_id like concat('%',#{query},'%')
             </if>
         </where>
-        limit #{start},#{num}
     </select>
 </mapper>

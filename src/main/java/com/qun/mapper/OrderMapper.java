@@ -22,5 +22,5 @@ public interface OrderMapper {
     int add(CartOrderVO order);
     int delete(long id);
     int update(Order order);
-    int getTotal(int start,int num,String query);
+    int getTotal(String query);
 }

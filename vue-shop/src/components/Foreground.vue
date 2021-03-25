@@ -103,7 +103,7 @@
         <span slot="footer" class="dialog-footer">
           <el-button @click="infoDialogVisible = false">取 消</el-button>
           <el-button type="success" @click="addCart">加入购物车</el-button>
-          <el-button type="warning">购 买</el-button>
+          <el-button type="warning" @click="toPay()">购 买</el-button>
         </span>
       </el-dialog>
     </el-main>
@@ -189,7 +189,7 @@ export default {
       var total = this.inputCount * good.price
       var order = {goodId:good.goodId,count:this.inputCount,time: new Date(),total:total}
 
-      const {data: res} = await this.$http.post("/order/add",order)
+      this.$http.post("/order/add",order)
 
       this.cart.push(order)
       this.count = this.cart.length
@@ -219,6 +219,22 @@ export default {
         this.inputCount--
       }
     },
+    async toPay(){
+      var good = this.editForm
+      var total = this.inputCount * good.price
+      var order = {goodId:good.goodId,count:this.inputCount,time: new Date(),total:total}
+
+      const {data:res} = await this.$http.post("/order/add",order)
+
+      const pay = {id:res.data,total:total,count:this.inputCount,goodId:good.goodId}
+      const {data: html} = await this.$http.post("/order/pay",pay)
+
+      this.alipayWap = html.data;
+      this.$nextTick(() => {
+        console.log(this.$refs.alipayWap.children[0].submit())
+      })
+
+    }
 
   },
 
