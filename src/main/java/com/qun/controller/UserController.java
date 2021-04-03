@@ -199,7 +199,7 @@ public class UserController {
         long id = ShiroUtil.getProfile().getId();
         File file = new File("D:\\upload\\avatar\\" + id + ".png");
         if (!file.exists()){
-            return Result.success("");
+            file = new File("D:\\upload\\avatar\\00000.png");
         }
 
         byte[] data = null;
