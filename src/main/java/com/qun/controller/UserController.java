@@ -7,6 +7,8 @@
  */
 package com.qun.controller;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.http.server.HttpServerResponse;
 import com.qun.common.lang.Result;
 import com.qun.pojo.dto.*;
 import com.qun.pojo.dto.Menu;
@@ -15,11 +17,13 @@ import com.qun.service.PermissionService;
 import com.qun.service.RoleService;
 import com.qun.service.UserService;
 import com.qun.util.ImageUtil;
+import com.qun.util.JwtUtils;
 import com.qun.util.ShiroUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,9 +32,11 @@ import java.awt.image.BufferedImage;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.util.List;
+import java.util.Objects;
 
 
 @Slf4j
@@ -46,6 +52,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @RequiresAuthentication //访问此方法必须先认证
     @GetMapping("/menu")
@@ -175,6 +184,7 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        assert bi != null;
         double width = bi.getWidth();
         int h = (int) (bi.getHeight()*(w/width));
 
@@ -188,17 +198,41 @@ public class UserController {
     public Result avatar() throws IOException {
         long id = ShiroUtil.getProfile().getId();
         File file = new File("D:\\upload\\avatar\\" + id + ".png");
+        if (!file.exists()){
+            return Result.success("");
+        }
 
         byte[] data = null;
-        try (InputStream is = new FileInputStream("D:\\upload\\avatar\\" + id + ".png")){
+        try (InputStream is = new FileInputStream(file)){
             data = new byte[is.available()];
             is.read(data);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         // 加密
         Encoder encoder = Base64.getEncoder();
         return Result.success(encoder.encodeToString(data));
+    }
+
+    @PostMapping("/register")
+    public Result register(@Validated @RequestBody UserDTO user, HttpServletResponse response){
+        userService.add(user);
+
+        String jwt = jwtUtils.generateToken(user.getId());
+
+        response.setHeader("Authorization",jwt);
+        response.setHeader("Access-Control-Expose-Headers","Authorization");
+
+
+        return Result.success(MapUtil.builder()
+                .put("id",user.getId())
+                .put("username",user.getUsername())
+                .put("address",user.getAddress())
+                .put("role",4)
+                .map()
+        );
+
     }
 
 }

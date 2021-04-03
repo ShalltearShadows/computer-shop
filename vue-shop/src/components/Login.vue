@@ -18,11 +18,36 @@
         </el-form-item>
         <!-- 按钮 -->
         <el-form-item class="btns">
+          <el-button type="info" class="reg" @click="registerDialogVisible = true">注册</el-button>
           <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="loginFormReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
+
+    <el-dialog title="添加用户" :visible.sync="registerDialogVisible" width="30%" @close="registerDialogClosed">
+      <!--输入区-->
+      <el-form :model="registerForm" :rules="registerFormRules" ref="registerFormRef" label-width="70px" class="demo-ruleForm">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="registerForm.username" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input prop="password" v-model="registerForm.password" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="mobile">
+          <el-input v-model="registerForm.mobile" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="地址" prop="address">
+          <el-input v-model="registerForm.address" clearable></el-input>
+        </el-form-item>
+      </el-form>
+
+      <!-- 按钮区 -->
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="registerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="register">确 定</el-button>
+            </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,6 +68,29 @@ export default {
         password: [
           {required: true, message: "请输入密码", trigger: "blur"},
           {min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur'}
+        ]
+      },
+      registerDialogVisible: false,
+      registerForm: {},
+      registerFormRules:{
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur"},
+          { min: 2, max: 16, message: '长度在 2 到 16 个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur"},
+          { min: 6, max: 16, message: '长度在 6 到 16 个字符', trigger: 'blur' }
+        ],
+        // email: [
+        //     { required: true, message: "请输入邮箱", trigger: "blur"},
+        //     { validator:this.checkEmail, trigger: "blur"}
+        // ],
+        mobile: [
+          { required: true, message: "请输入手机", trigger: "blur"},
+          { validator:this.checkMobile, trigger: "blur"}
+        ],
+        address: [
+          { required: true, message: "请输入地址", trigger: "blur"}
         ]
       }
     }
@@ -82,7 +130,32 @@ export default {
       // 通过编程式导航跳转到前台主页
       this.$router.push('/foreground')
     },
+    async register(){
+      this.$refs.registerFormRef.validate(async valid => {
+        if (!valid){
+          return;
+        }
+        const {data:res} = await this.$http.post('user/register',this.registerForm).then(res => {
 
+          if (res.data.code!==200){
+            this.$message.error("登录失败")
+            return
+          }
+          this.$message.success("登陆成功")
+          //将服务器返回的token存储到sessionStorage
+          window.localStorage.setItem("token", res.headers.authorization)
+
+          this.$store.commit("SET_TOKEN", res.headers.authorization)
+          this.$store.commit("SET_USERINFO", res.data.data)
+          this.getAvatar()
+
+        });
+
+      })
+    },
+    registerDialogClosed(){
+      this.$refs.registerFormRef.resetFields();
+    },
   }
 }
 </script>
@@ -134,5 +207,9 @@ export default {
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
+}
+
+.reg {
+  margin-right: 180px;
 }
 </style>

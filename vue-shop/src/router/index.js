@@ -65,7 +65,7 @@ const router = new VueRouter({
 
 //挂载路由守卫
 router.beforeEach((to, from, next) => {
-    if (to.path === '/login'||to.path === '/foreground') {
+    if (to.path === '/login'||to.path === '/foreground'||to.path === '/user/register') {
         return next();
     }
 

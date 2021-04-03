@@ -54,7 +54,7 @@ Axios.interceptors.response.use (response => {
 
     ElementUI.Message.error(error.response.data.msg)
 
-    return null
+    return error.response
 });
 
 // 导入字体图标
