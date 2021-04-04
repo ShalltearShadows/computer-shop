@@ -29,4 +29,14 @@ public class ImageUtil {
             return false;
         }
     }
+
+    public static void main(String[] args) {
+
+        for (int i = 0; i < 21; i++) {
+            int image = 200541001+i;
+            String path = "D:\\upload\\computer\\"+image+".jpg";
+            changeSize(800,800,path);
+        }
+
+    }
 }

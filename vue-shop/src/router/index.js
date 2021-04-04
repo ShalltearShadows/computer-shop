@@ -52,7 +52,7 @@ const router = new VueRouter({
                 //商品分类
                 {path: '/categories', component: Cate},
                 //添加商品
-                {path: '/goods/add', component: Add},
+                {path: '/good/add', component: Add},
                 //订单列表
                 {path: '/order/list', component: OrderList},
                 {path: '/reports', component: Report},

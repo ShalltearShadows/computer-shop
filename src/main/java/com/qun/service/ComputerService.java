@@ -7,9 +7,11 @@
  */
 package com.qun.service;
 
+import com.qun.common.lang.Result;
 import com.qun.pojo.dto.ForegroundMainListDTO;
 import com.qun.pojo.entity.Computer;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,8 +31,8 @@ public interface ComputerService {
 
     int update(Computer computer);
 
-    int upload(@Param("image") String image);
-
     List<ForegroundMainListDTO> query(String info);
+
+    Result upload(MultipartFile file);
 
 }

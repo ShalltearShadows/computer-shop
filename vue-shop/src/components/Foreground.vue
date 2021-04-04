@@ -167,8 +167,7 @@ export default {
       this.editForm.brand = res.data.brand
       this.editForm.cpu = res.data.cpu
       this.editForm.gpu = res.data.gpu
-      // this.editForm.url = res.data.url
-      this.editForm.url = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+      this.editForm.url = res.data.url
       this.editForm.screen = res.data.screen
       this.editForm.memory = res.data.memory
       this.editForm.hardDisk = res.data.hardDisk
@@ -187,7 +186,7 @@ export default {
     async addCart() {
       var good = this.editForm
       var total = this.inputCount * good.price
-      var order = {goodId:good.goodId,count:this.inputCount,time: new Date(),total:total}
+      var order = {goodId:good.goodId,count:this.inputCount,time: new Date(),total:total,url: good.url}
 
       this.$http.post("/order/add",order)
 

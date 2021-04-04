@@ -18,11 +18,11 @@
     </select>
 
     <select id="query" resultType="ForegroundMainListDTO">
-        select id,brand,cpu,gpu,image url  from computer where brand like concat('%',#{query},'%')
+        select id,brand,cpu,gpu,url  from computer where brand like concat('%',#{query},'%')
     </select>
 
     <select id="getFFL" resultType="ForegroundMainListDTO">
-        select id,brand,cpu,gpu,image url  from computer limit #{start},5
+        select id,brand,cpu,gpu,url  from computer limit #{start},5
     </select>
 
     <select id="getTotal" resultType="int">
@@ -33,9 +33,9 @@
         select * from computer where id = #{id}
     </select>
 
-    <insert id="add" parameterType="Computer">
-        insert into computer(brand, cpu, gpu, screen, memory, hard_disk, price, stock, image)
-            VALUES(#{brand},#{cpu},#{gpu},#{screen},#{memory},#{hardDisk},#{price},#{stock},#{image})
+    <insert id="add" parameterType="Computer" useGeneratedKeys="true" keyProperty="id">
+        insert into computer(brand, cpu, gpu, screen, memory, hard_disk, price, stock, url)
+            VALUES(#{brand},#{cpu},#{gpu},#{screen},#{memory},#{hardDisk},#{price},#{stock},#{url})
     </insert>
 
     <delete id="delete">
@@ -45,24 +45,6 @@
     <update id="update" parameterType="Computer">
         update computer
         <set>
-            <if test="brand != null">
-                brand = #{brand},
-            </if>
-            <if test="cpu != null">
-                cpu = #{cpu},
-            </if>
-            <if test="gpu != null">
-                gpu = #{gpu},
-            </if>
-            <if test="screen != null">
-                screen = #{screen},
-            </if>
-            <if test="memory != null">
-                memory = #{memory},
-            </if>
-            <if test="hardDisk != null">
-                hard_disk = #{hardDisk},
-            </if>
             <if test="price != null">
                 price = #{price},
             </if>

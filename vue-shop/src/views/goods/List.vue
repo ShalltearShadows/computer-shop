@@ -26,17 +26,23 @@
         <el-table-column label="#" type="index"></el-table-column>
         <el-table-column label="编号" prop="id" width="170px"></el-table-column>
         <el-table-column label="品牌" prop="brand" width="370px"></el-table-column>
-        <el-table-column label="价格" prop="price" width="120px"></el-table-column>
         <el-table-column label="CPU" prop="cpu" width="120px"></el-table-column>
         <el-table-column label="GPU" prop="gpu" width="120px"></el-table-column>
         <el-table-column label="内存" prop="memory" width="120px"></el-table-column>
         <el-table-column label="硬盘" prop="hardDisk" width="120px"></el-table-column>
         <el-table-column label="分辨率" prop="screen" width="120px"></el-table-column>
+
+        <el-table-column label="价格" width="120px">
+          <template slot-scope="scope">
+            {{scope.row.price|moneyFormat}}
+          </template>
+        </el-table-column>
+
         <el-table-column label="库存" prop="stock" width="120px"></el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="updateById(scope.row.id)">修改</el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showupdateById(scope.row)">修改</el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeById(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -52,29 +58,11 @@
         <!--输入区-->
         <el-form :model="editGoodForm" :rules="editFormRules" ref="editGoodFormRef" label-width="70px"
                  class="demo-ruleForm">
-          <el-form-item label="编号">
-            <el-input v-model="editGoodForm.id" disabled></el-input>
-          </el-form-item>
           <el-form-item label="品牌" prop="brand">
-            <el-input v-model="editGoodForm.brand" clearable></el-input>
+            <el-input v-model="editGoodForm.brand" disabled></el-input>
           </el-form-item>
           <el-form-item label="价格" prop="price">
             <el-input v-model="editGoodForm.price" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="CPU">
-            <el-input v-model="editGoodForm.cpu" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="GPU">
-            <el-input v-model="editGoodForm.gpu" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="内存">
-            <el-input v-model="editGoodForm.memory" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="硬盘">
-            <el-input v-model="editGoodForm.hardDisk" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="分辨率">
-            <el-input v-model="editGoodForm.screen" clearable></el-input>
           </el-form-item>
           <el-form-item label="库存" prop="stock">
             <el-input v-model="editGoodForm.stock" clearable></el-input>
@@ -118,9 +106,6 @@ export default {
 
       },
       editFormRules: {
-        brand: [
-          {required: true, message: "请输入品牌", trigger: "blur"}
-        ],
         price: [
           {required: true, message: "请输入价格", trigger: "blur"}
         ],
@@ -175,21 +160,19 @@ export default {
       this.$message.success('删除商品成功！');
       this.getGoodsList()
     },
-    updateById(id) {
-      this.editGoodForm.id = id;
+    showupdateById(good) {
+      this.editGoodForm.id = good.id;
+      this.editGoodForm.brand = good.brand
+      this.editGoodForm.price = good.price
+      this.editGoodForm.stock = good.stock
       this.editGoodVisible = true;
     },
     goAddPage() {
-      this.$router.push('/goods/add')
+      this.$router.push('/good/add')
     },
     editGoodDialogClosed() {
       this.editGoodForm.brand = ''
       this.editGoodForm.price = ''
-      this.editGoodForm.cpu = ''
-      this.editGoodForm.gpu = ''
-      this.editGoodForm.memory = ''
-      this.editGoodForm.hardDisk = ''
-      this.editGoodForm.screen = ''
       this.editGoodForm.stock = ''
     },
     editGood() {
@@ -199,12 +182,9 @@ export default {
         }
         const {data: res} = await this.$http.post('good/update', this.editGoodForm)
 
-        this.$message.success('修改成功！');
-
         this.editGoodVisible = false;
 
         this.getGoodsList()
-
       })
     }
   }

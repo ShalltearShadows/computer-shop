@@ -25,5 +25,5 @@ public class Computer implements Serializable {
     private String hardDisk;
     private BigDecimal price;
     private int stock;
-    private String image;
+    private String url;
 }

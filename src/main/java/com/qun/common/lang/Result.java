@@ -21,6 +21,10 @@ public class Result implements Serializable {
     private String msg;
     private Object data;
 
+    public static Result success(){
+        return success(null);
+    }
+
     public static Result success(Object data){
         return success(200,"操作成功！",data);
     }
@@ -30,7 +34,6 @@ public class Result implements Serializable {
         result.setCode(code).setMsg(msg).setData(data);
         return result;
     }
-
 
     public static Result fail(String msg){
         return fail(400,msg,null);
