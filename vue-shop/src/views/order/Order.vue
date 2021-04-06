@@ -134,9 +134,6 @@ export default {
       })
 
       this.infoDialogVisible = true
-    },
-    pay() {
-      //TODO 支付
     }
   }
 }

@@ -7,14 +7,14 @@
  */
 package com.qun.service;
 
-import com.qun.pojo.dto.PermDTO;
-import com.qun.pojo.dto.RoleDTO;
+import com.qun.pojo.vo.PermVO;
+import com.qun.pojo.vo.RoleVO;
 import com.qun.pojo.entity.Role;
 
 import java.util.List;
 
 public interface RoleService {
-    List<RoleDTO> getAll();
+    List<RoleVO> getAll();
 
     Role getRole(Long id);
 
@@ -22,7 +22,7 @@ public interface RoleService {
 
     int[] getPermsByRoleId(int id);
 
-    int deletePerms(int rid, int pid, List<PermDTO> permsDTO);
+    int deletePerms(int rid, int pid, List<PermVO> permsDTO);
 
     int alterName(int rid,String name);
 

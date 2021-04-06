@@ -8,15 +8,17 @@
 package com.qun.service.impl;
 
 import com.qun.common.lang.Result;
-import com.qun.pojo.dto.ForegroundMainListDTO;
+import com.qun.pojo.vo.ForegroundMainListVO;
 import com.qun.pojo.entity.Computer;
 import com.qun.mapper.ComputerMapper;
 import com.qun.service.ComputerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
-    public List<ForegroundMainListDTO> getFFL(int start) {
+    public List<ForegroundMainListVO> getFFL(int start) {
         return computerMapper.getFFL(start);
     }
 
@@ -63,7 +65,7 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
-    public List<ForegroundMainListDTO> query(String info) {
+    public List<ForegroundMainListVO> query(String info) {
         return computerMapper.query(info);
     }
 
@@ -99,6 +101,19 @@ public class ComputerServiceImpl implements ComputerService {
         }
 
         return Result.success("http://localhost:8080/good/image/"+imgName);
+    }
+
+    @Override
+    public byte[] image(@PathVariable("id") String image) throws IOException {
+        File file = new File("D:\\upload\\computer\\"+image);
+        FileInputStream inputStream = new FileInputStream(file);
+
+        byte[] bytes = new byte[inputStream.available()];
+
+        inputStream.read(bytes, 0, inputStream.available());
+        inputStream.close();
+
+        return bytes;
     }
 
 }

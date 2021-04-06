@@ -5,12 +5,12 @@
  * @Date: 2020/12/11
  * @Time: 16:45
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 import lombok.Data;
 
 @Data
-public class DeletePermDTO {
+public class DeletePermVO {
     private int roleId;
     private int permId;
 }

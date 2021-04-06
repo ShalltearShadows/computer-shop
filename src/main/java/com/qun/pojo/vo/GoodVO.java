@@ -2,12 +2,12 @@
  * Created by IntelliJ IDEA.
  *
  * @Author: LiQun
- * @Date: 2020/12/8
- * @Time: 15:06
+ * @Date: 2020/12/13
+ * @Time: 17:18
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
-import com.qun.pojo.entity.User;
+import com.qun.pojo.entity.Computer;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-public class UserListDTO {
-    private List<User> users;
+public class GoodVO {
+    private List<Computer> goods;
     private int total;
 }

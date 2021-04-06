@@ -5,7 +5,7 @@
  * @Date: 2020/12/9
  * @Time: 18:03
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 import lombok.Data;
 
@@ -13,19 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PermDTO {
+public class PermVO {
     private int id;
     private int parentId;
     private String roleName;
-    private List<PermDTO> children;
+    private List<PermVO> children;
 
-    public PermDTO(int id,int parentId, String roleName) {
+    public PermVO(int id, int parentId, String roleName) {
         this.id = id;
         this.parentId = parentId;
         this.roleName = roleName;
     }
 
-    public void setChildren(PermDTO children) {
+    public void setChildren(PermVO children) {
         if (this.children==null){
             this.children = new ArrayList<>();
         }

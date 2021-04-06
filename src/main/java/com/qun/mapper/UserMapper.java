@@ -7,7 +7,7 @@
  */
 package com.qun.mapper;
 
-import com.qun.pojo.dto.UserDTO;
+import com.qun.pojo.vo.UserVO;
 import com.qun.pojo.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +24,7 @@ public interface UserMapper {
 
     User get(@Param("id") long id);
 
-    int add(UserDTO user);
+    int add(UserVO user);
 
     int delete(long id);
 

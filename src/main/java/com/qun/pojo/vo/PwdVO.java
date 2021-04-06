@@ -5,13 +5,13 @@
  * @Date: 2020/12/18
  * @Time: 11:26
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 
 import lombok.Data;
 
 @Data
-public class PwdDTO {
+public class PwdVO {
     private long id;
     private String password;
 }

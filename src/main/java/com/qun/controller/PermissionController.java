@@ -9,9 +9,9 @@ package com.qun.controller;
 
 
 import com.qun.common.lang.Result;
-import com.qun.pojo.dto.*;
 import com.qun.pojo.entity.Permission;
 import com.qun.pojo.entity.Role;
+import com.qun.pojo.vo.*;
 import com.qun.service.PermissionService;
 import com.qun.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -34,23 +34,23 @@ public class PermissionController {
     @RequiresPermissions("perm:role")
     public Result role(){
 
-        List<RoleDTO> roleDTOS = roleService.getAll();
-        for (RoleDTO roleDTO : roleDTOS) {
-            int[] ids = roleService.getPermsByRoleId(roleDTO.getId());
-            roleDTO.setPerm(ids);
+        List<RoleVO> roleVOS = roleService.getAll();
+        for (RoleVO roleVO : roleVOS) {
+            int[] ids = roleService.getPermsByRoleId(roleVO.getId());
+            roleVO.setPerm(ids);
         }
 
-        permissionService.getRoleAndPerm(roleDTOS);
+        permissionService.getRoleAndPerm(roleVOS);
 
-        return Result.success(roleDTOS);
+        return Result.success(roleVOS);
     }
 
     @PostMapping("/delperm")
     @RequiresPermissions("perm:role:delperm")
-    public Result deltePerm(@RequestBody DeletePermDTO delete){
+    public Result deltePerm(@RequestBody DeletePermVO delete){
         Result role = role();
-        List<RoleDTO> data = (List<RoleDTO>) role.getData();
-        RoleDTO dto = null;
+        List<RoleVO> data = (List<RoleVO>) role.getData();
+        RoleVO dto = null;
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getId()==delete.getRoleId()) {
                 dto = data.get(i);
@@ -65,27 +65,27 @@ public class PermissionController {
 
 
     @PostMapping("/alname")
-    public Result alname(@RequestBody AlterRoleNameDTO nameDTO){
+    public Result alname(@RequestBody AlterRoleNameVO nameDTO){
         int flag = roleService.alterName(nameDTO.getRoleId(), nameDTO.getRoleName());
         return flag==1?Result.success("修改成功"):Result.fail("修改失败");
     }
 
     @PostMapping("/delrole")
-    public Result delete(@RequestBody RoleDTO roleDTO){
-        int flag = roleService.deleteRole(roleDTO.getId());
+    public Result delete(@RequestBody RoleVO roleVO){
+        int flag = roleService.deleteRole(roleVO.getId());
         return flag==1?Result.success("删除成功"):Result.fail("删除失败");
     }
 
 
     @GetMapping("/list")
     public Result getAllPerm(){
-        List<PermDTO> list = permissionService.getOrderPermission();
+        List<PermVO> list = permissionService.getOrderPermission();
 
         return Result.success(list);
     }
 
     @PostMapping("/assign")
-    public Result assign(@RequestBody IdStrDTO idStr){
+    public Result assign(@RequestBody IdStrVO idStr){
         int flag = roleService.alterPerms(idStr.getRid(), idStr.getIds());
         return flag==1?Result.success("修改成功"):Result.fail("修改失败");
     }

@@ -17,11 +17,11 @@
         limit #{start},#{num}
     </select>
 
-    <select id="query" resultType="ForegroundMainListDTO">
+    <select id="query" resultType="ForegroundMainListVO">
         select id,brand,cpu,gpu,url  from computer where brand like concat('%',#{query},'%')
     </select>
 
-    <select id="getFFL" resultType="ForegroundMainListDTO">
+    <select id="getFFL" resultType="ForegroundMainListVO">
         select id,brand,cpu,gpu,url  from computer limit #{start},5
     </select>
 

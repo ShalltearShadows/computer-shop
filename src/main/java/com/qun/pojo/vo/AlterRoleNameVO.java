@@ -5,12 +5,12 @@
  * @Date: 2020/12/12
  * @Time: 16:28
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 import lombok.Data;
 
 @Data
-public class AlterRoleNameDTO {
+public class AlterRoleNameVO {
     private int roleId;
     private String roleName;
 }

@@ -7,36 +7,25 @@
  */
 package com.qun.controller;
 
-import cn.hutool.core.map.MapUtil;
-import cn.hutool.http.server.HttpServerResponse;
 import com.qun.common.lang.Result;
-import com.qun.pojo.dto.*;
-import com.qun.pojo.dto.Menu;
+import com.qun.pojo.vo.*;
 import com.qun.pojo.entity.User;
 import com.qun.service.PermissionService;
 import com.qun.service.RoleService;
 import com.qun.service.UserService;
-import com.qun.util.ImageUtil;
-import com.qun.util.JwtUtils;
 import com.qun.util.ShiroUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.image.BufferedImage;
-import java.util.Base64;
-import java.util.Base64.Encoder;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.*;
 import java.util.List;
-import java.util.Objects;
 
 
 @Slf4j
@@ -53,16 +42,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JwtUtils jwtUtils;
-
     @RequiresAuthentication //访问此方法必须先认证
     @GetMapping("/menu")
     public Result menu(){
         Long id = ShiroUtil.getProfile().getId();
-
         List<Menu> menu = permissionService.getOrderMenu(roleService.getPerms(id));
-
         return Result.success(menu);
     }
 
@@ -74,53 +58,52 @@ public class UserController {
         List<User> all = userService.getAll(start, size, "".equals(query)?null:query);
         int total = userService.getTotal();
 
-        return Result.success(new UserListDTO().setUsers(all).setTotal(total));
+        return Result.success(new UserListVO().setUsers(all).setTotal(total));
     }
 
     @PostMapping("/add")
     @RequiresPermissions("user:list:add")
-    public Result add(@Validated @RequestBody UserDTO user){
-        int flag = userService.add(user);
-
-        return flag==1?Result.success("添加成功"):Result.fail("添加失败");
+    public Result add(@Validated @RequestBody UserVO user){
+        userService.add(user);
+        return Result.success();
     }
 
     @GetMapping("/edit/{id}")
     @RequiresPermissions("user:list:edit")
     public Result edit(@PathVariable("id") Long id){
-        UserDTO user = userService.getUserDTO(id);
+        UserVO user = userService.getUserVO(id);
         return Result.success(user);
     }
 
     @PostMapping("/edit")
     @RequiresPermissions("user:list:edit")
-    public Result edit(@RequestBody UserDTO userDTO){
-        User user = new User().setId(userDTO.getId()).setAddress(userDTO.getAddress())
-                .setMobile(userDTO.getMobile()).setUsername(userDTO.getUsername());
-        int flag = userService.update(user);
-        return flag==1?Result.success("修改成功"):Result.fail("修改失败");
+    public Result edit(@RequestBody UserVO userVO){
+        User user = new User().setId(userVO.getId()).setAddress(userVO.getAddress())
+                .setMobile(userVO.getMobile()).setUsername(userVO.getUsername());
+        userService.update(user);
+        return Result.success();
     }
 
     @PostMapping("/delete/{id}")
     @RequiresPermissions("user:list:delete")
     public Result delete(@NotNull @PathVariable("id") Long id){
-        int flag = userService.delete(id);
-        return flag==1?Result.success("删除成功"):Result.fail("删除失败");
+        userService.delete(id);
+        return Result.success();
     }
 
 
     @GetMapping("/roles")
     @RequiresPermissions("user:list:assign")
     public Result roles(){
-        List<RoleDTO> role = roleService.getAll();
+        List<RoleVO> role = roleService.getAll();
         return Result.success(role);
     }
 
     @PostMapping("/role/{id}")
     @RequiresPermissions("user:list:role")
-    public Result role(@NotNull @PathVariable("id") Long id,@RequestBody RoleDTO roleDTO){
-        int flag = userService.updateRole(id, roleDTO.getId());
-        return flag==1?Result.success("分配成功"):Result.fail("分配失败");
+    public Result role(@NotNull @PathVariable("id") Long id,@RequestBody RoleVO roleVO){
+        userService.updateRole(id, roleVO.getId());
+        return Result.success();
     }
 
     @GetMapping("/info")
@@ -132,14 +115,14 @@ public class UserController {
 
     @PostMapping("/alter")
     public Result alter(@RequestBody User user){
-        int flag = userService.update(user);
-        return flag==1?Result.success("修改成功"):Result.fail("修改失败");
+        userService.update(user);
+        return Result.success();
     }
 
     @PostMapping("/password")
-    public Result password(@RequestBody PwdDTO pwd){
-        int flag = userService.updatePassword(pwd.getId(),pwd.getPassword());
-        return flag==1?Result.success("修改成功"):Result.fail("修改失败");
+    public Result password(@RequestBody PwdVO pwd){
+        userService.updatePassword(pwd.getId(),pwd.getPassword());
+        return Result.success();
     }
 
 
@@ -151,88 +134,26 @@ public class UserController {
         return Result.success("你是超级管理员吗，不然的话，你是不可能会有这个方法的权限的");
     }
 
-
-    @GetMapping("/test")
-    @RequiresPermissions("sys:list:info")
-    public Result home(){
-        return Result.fail("");
-    }
-
+    /**
+     * 上传头像
+     */
     @PostMapping("/upload")
     public Result upload(MultipartFile file) throws IOException {
         if(file==null){
             return Result.fail("图片为空");
         }
-
-        String upload = "D:\\upload\\avatar";
-        String name = file.getOriginalFilename();
-        assert name != null;
-        String suffix = "png";
-        String imgName = ShiroUtil.getProfile().getId()+"."+suffix;
-        File image = new File(upload,imgName);
-
-        try {
-            file.transferTo(image);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        int w = 238;
-        BufferedImage bi = null;
-        try {
-             bi = ImageIO.read(image);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert bi != null;
-        double width = bi.getWidth();
-        int h = (int) (bi.getHeight()*(w/width));
-
-        ImageUtil.changeSize(w,h,upload+"//"+imgName);
-
+        userService.upload(file);
         return avatar();
-
     }
 
     @GetMapping("/avatar")
-    public Result avatar() throws IOException {
-        long id = ShiroUtil.getProfile().getId();
-        File file = new File("D:\\upload\\avatar\\" + id + ".png");
-        if (!file.exists()){
-            file = new File("D:\\upload\\avatar\\00000.png");
-        }
-
-        byte[] data = null;
-        try (InputStream is = new FileInputStream(file)){
-            data = new byte[is.available()];
-            is.read(data);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // 加密
-        Encoder encoder = Base64.getEncoder();
-        return Result.success(encoder.encodeToString(data));
+    public Result avatar() {
+        return userService.avatar();
     }
 
     @PostMapping("/register")
-    public Result register(@Validated @RequestBody UserDTO user, HttpServletResponse response){
-        userService.add(user);
-
-        String jwt = jwtUtils.generateToken(user.getId());
-
-        response.setHeader("Authorization",jwt);
-        response.setHeader("Access-Control-Expose-Headers","Authorization");
-
-
-        return Result.success(MapUtil.builder()
-                .put("id",user.getId())
-                .put("username",user.getUsername())
-                .put("address",user.getAddress())
-                .put("role",4)
-                .map()
-        );
-
+    public Result register(@Validated @RequestBody UserVO user, HttpServletResponse response){
+        return userService.register(user,response);
     }
 
 }

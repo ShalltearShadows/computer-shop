@@ -7,10 +7,10 @@
  */
 package com.qun.service.impl;
 
-import com.qun.pojo.dto.PermDTO;
-import com.qun.pojo.dto.RoleDTO;
+import com.qun.pojo.vo.PermVO;
+import com.qun.pojo.vo.RoleVO;
 import com.qun.pojo.entity.Permission;
-import com.qun.pojo.dto.Menu;
+import com.qun.pojo.vo.Menu;
 import com.qun.mapper.PermissionMapper;
 import com.qun.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<PermDTO> getOrderPermission() {
+    public List<PermVO> getOrderPermission() {
 
         List<Permission> all = getAll();
 
@@ -42,32 +42,32 @@ public class PermissionServiceImpl implements PermissionService {
     /**
      * 结构化权限
      */
-    private List<PermDTO> structuredPerm(List<Permission> all) {
-        List<PermDTO> perm2 = new ArrayList<>();
-        List<PermDTO> perm1 = new ArrayList<>();
+    private List<PermVO> structuredPerm(List<Permission> all) {
+        List<PermVO> perm2 = new ArrayList<>();
+        List<PermVO> perm1 = new ArrayList<>();
 
         for (Permission m : all) {
             if (m.getLevel()==2){
-                perm2.add(new PermDTO(m.getPermId(),m.getParentId(),m.getName()));
+                perm2.add(new PermVO(m.getPermId(),m.getParentId(),m.getName()));
             }
         }
 
-        for (PermDTO e : perm2) {
+        for (PermVO e : perm2) {
             for (Permission n : all) {
                 if (n.getParentId()==e.getId()){
-                    e.setChildren(new PermDTO(n.getPermId(),n.getParentId(),n.getName()));
+                    e.setChildren(new PermVO(n.getPermId(),n.getParentId(),n.getName()));
                 }
             }
         }
 
         for (Permission m : all) {
             if (m.getLevel()==1){
-                perm1.add(new PermDTO(m.getPermId(),m.getParentId(),m.getName()));
+                perm1.add(new PermVO(m.getPermId(),m.getParentId(),m.getName()));
             }
         }
 
-        for (PermDTO p2 : perm2) {
-            for (PermDTO p1 : perm1) {
+        for (PermVO p2 : perm2) {
+            for (PermVO p1 : perm1) {
                 if (p1.getId()==p2.getParentId()){
                     p1.setChildren(p2);
                 }
@@ -139,12 +139,12 @@ public class PermissionServiceImpl implements PermissionService {
      * 获取每个角色结构化的全部权限
      */
     @Override
-    public void getRoleAndPerm(List<RoleDTO>  roleDTOS) {
-        for (RoleDTO dto : roleDTOS) {
+    public void getRoleAndPerm(List<RoleVO> roleVOS) {
+        for (RoleVO dto : roleVOS) {
             List<Permission> list = permissionMapper.get(dto.getPerm());
 
-            List<PermDTO> permDTOS = structuredPerm(list);
-            dto.setChildren(permDTOS);
+            List<PermVO> permVOS = structuredPerm(list);
+            dto.setChildren(permVOS);
         }
     }
 

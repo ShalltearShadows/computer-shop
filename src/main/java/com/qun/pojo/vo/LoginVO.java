@@ -5,7 +5,7 @@
  * @Date: 2020/12/2
  * @Time: 12:04
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
-public class LoginDTO implements Serializable {
+public class LoginVO implements Serializable {
 
     @NotNull(message = "用户名不能为空")
     private Long id;

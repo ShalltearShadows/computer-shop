@@ -5,17 +5,17 @@
  * @Date: 2020/12/9
  * @Time: 20:30
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class RoleDTO {
+public class RoleVO {
     private int id;
     private String name;
     private int[] perm;
 
-    private List<PermDTO> children;
+    private List<PermVO> children;
 }

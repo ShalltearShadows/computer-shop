@@ -8,18 +8,19 @@
 package com.qun.service;
 
 import com.qun.common.lang.Result;
-import com.qun.pojo.dto.ForegroundMainListDTO;
+import com.qun.pojo.vo.ForegroundMainListVO;
 import com.qun.pojo.entity.Computer;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ComputerService {
 
     List<Computer> getAll(int start,int num, String query);
 
-    List<ForegroundMainListDTO> getFFL(int start);
+    List<ForegroundMainListVO> getFFL(int start);
 
     int getTotal();
 
@@ -31,8 +32,10 @@ public interface ComputerService {
 
     int update(Computer computer);
 
-    List<ForegroundMainListDTO> query(String info);
+    List<ForegroundMainListVO> query(String info);
 
     Result upload(MultipartFile file);
+
+    byte[] image(String image) throws IOException;
 
 }

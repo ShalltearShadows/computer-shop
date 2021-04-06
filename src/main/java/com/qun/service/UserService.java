@@ -7,9 +7,15 @@
  */
 package com.qun.service;
 
-import com.qun.pojo.dto.UserDTO;
+import com.qun.common.lang.Result;
+import com.qun.pojo.vo.LoginVO;
+import com.qun.pojo.vo.UserVO;
 import com.qun.pojo.entity.User;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface UserService {
@@ -20,9 +26,9 @@ public interface UserService {
 
     User get(long id);
 
-    UserDTO getUserDTO(long id);
+    UserVO getUserVO(long id);
 
-    int add(UserDTO user);
+    int add(UserVO user);
 
     int delete(long id);
 
@@ -34,4 +40,11 @@ public interface UserService {
 
     int updatePassword(long id,String password);
 
+    Result login(LoginVO loginVO, HttpServletResponse response);
+
+    void upload(MultipartFile file);
+
+    Result avatar();
+
+    Result register(UserVO user, HttpServletResponse response);
 }

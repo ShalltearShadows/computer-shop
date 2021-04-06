@@ -9,8 +9,8 @@ package com.qun.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.druid.util.StringUtils;
-import com.qun.pojo.dto.PermDTO;
-import com.qun.pojo.dto.RoleDTO;
+import com.qun.pojo.vo.PermVO;
+import com.qun.pojo.vo.RoleVO;
 import com.qun.pojo.entity.Role;
 import com.qun.mapper.RoleMapper;
 import com.qun.service.RoleService;
@@ -29,11 +29,11 @@ public class RoleServiceImpl implements RoleService {
     private RoleMapper roleMapper;
 
     @Override
-    public List<RoleDTO> getAll() {
+    public List<RoleVO> getAll() {
         List<Role> all = roleMapper.getAll();
-        List<RoleDTO> roles = new ArrayList<>(all.size());
+        List<RoleVO> roles = new ArrayList<>(all.size());
         for (int i = 0; i < all.size(); i++) {
-            roles.add(new RoleDTO());
+            roles.add(new RoleVO());
             BeanUtil.copyProperties(all.get(i),roles.get(i));
         }
 
@@ -71,7 +71,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public int deletePerms(int rid,int pid,List<PermDTO> permsDTO) {
+    public int deletePerms(int rid,int pid,List<PermVO> permsDTO) {
         if (permsDTO==null){
             permsDTO = new ArrayList<>();
         }
@@ -80,7 +80,7 @@ public class RoleServiceImpl implements RoleService {
                 permsDTO.remove(i);
                 break flag;
             }
-            List<PermDTO> children = permsDTO.get(i).getChildren();
+            List<PermVO> children = permsDTO.get(i).getChildren();
             if (children==null){
                 continue;
             }
@@ -89,7 +89,7 @@ public class RoleServiceImpl implements RoleService {
                     children.remove(j);
                     break flag;
                 }
-                List<PermDTO> list = children.get(j).getChildren();
+                List<PermVO> list = children.get(j).getChildren();
                 if (list==null){
                     continue;
                 }
@@ -105,17 +105,17 @@ public class RoleServiceImpl implements RoleService {
         StringBuilder perm = new StringBuilder("");
 
 
-        for (PermDTO permDTO : permsDTO) {
-            perm.append(permDTO.getId()).append(",");
-            if (permDTO.getChildren()==null){
+        for (PermVO permVO : permsDTO) {
+            perm.append(permVO.getId()).append(",");
+            if (permVO.getChildren()==null){
                 continue;
             }
-            for (PermDTO child : permDTO.getChildren()) {
+            for (PermVO child : permVO.getChildren()) {
                 perm.append(child.getId()).append(",");
                 if (child.getChildren()==null){
                     continue;
                 }
-                for (PermDTO childChild : child.getChildren()) {
+                for (PermVO childChild : child.getChildren()) {
                     perm.append(childChild.getId()).append(",");
                 }
             }

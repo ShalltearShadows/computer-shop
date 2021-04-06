@@ -7,7 +7,7 @@
  */
 package com.qun.mapper;
 
-import com.qun.pojo.dto.ForegroundMainListDTO;
+import com.qun.pojo.vo.ForegroundMainListVO;
 import com.qun.pojo.entity.Computer;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,7 +21,7 @@ public interface ComputerMapper {
 
     List<Computer> getAll(@Param("start") int start, @Param("num") int num, @Param("query") String query);
 
-    List<ForegroundMainListDTO> getFFL(int start);
+    List<ForegroundMainListVO> getFFL(int start);
 
     int getTotal();
 
@@ -35,6 +35,6 @@ public interface ComputerMapper {
 
     int upload(@Param("image") String image);
 
-    List<ForegroundMainListDTO> query(String info);
+    List<ForegroundMainListVO> query(String info);
 
 }

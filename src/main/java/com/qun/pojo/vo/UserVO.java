@@ -5,7 +5,7 @@
  * @Date: 2020/12/8
  * @Time: 15:31
  */
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @Accessors(chain = true)
-public class UserDTO{
+public class UserVO {
     private Long id;
 
     @NotBlank(message = "用户名不能为空")

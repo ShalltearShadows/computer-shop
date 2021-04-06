@@ -1,11 +1,11 @@
-package com.qun.pojo.dto;
+package com.qun.pojo.vo;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class ForegroundMainListDTO implements Serializable {
+public class ForegroundMainListVO implements Serializable {
     private long id;
     private String url;
     private String brand;
