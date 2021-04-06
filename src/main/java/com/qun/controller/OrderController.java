@@ -32,17 +32,7 @@ public class OrderController {
 
     @GetMapping("/all")
     public Result getAllOrder(@RequestParam("query") String query,@RequestParam("pagesize") int size,@RequestParam("pagenum") int num){
-
-        int start = (num-1)*size;
-
-        List<Order> all = orderService.getAll(start, size, "".equals(query)?null:query);
-
-        int total = orderService.getTotal("".equals(query)?null:query);
-        Map<Object, Object> map = MapUtil.builder()
-                .put("orders", all)
-                .put("total", total)
-                .map();
-        return Result.success(map);
+        return orderService.getAllOrder("".equals(query)?null:query,(num-1)*size,size);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -58,12 +48,12 @@ public class OrderController {
 
     @PostMapping("/update")//返回给支付宝
     public String update(HttpServletRequest request){
-        String out_trade_no = request.getParameter("out_trade_no");
-
-        Order order = new Order();
-        order.setId(Long.valueOf(out_trade_no)).setPay(1);
-        orderService.update(order);
-
+        orderService.setPay(request.getParameter("out_trade_no"));
         return "success";
+    }
+
+    @GetMapping("/getCart")
+    public Result getCart(){
+        return orderService.getCart();
     }
 }

@@ -9,6 +9,7 @@ package com.qun.mapper;
 
 import com.qun.pojo.vo.CartOrderVO;
 import com.qun.pojo.entity.Order;
+import com.qun.pojo.vo.CartShowVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,5 @@ public interface OrderMapper {
     int delete(long id);
     int update(Order order);
     int getTotal(String query);
+    List<CartShowVO> getCartOrder(Long id);
 }

@@ -1,6 +1,7 @@
 package com.qun.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.map.MapUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -12,13 +13,15 @@ import com.qun.pojo.entity.Computer;
 import com.qun.pojo.vo.CartOrderVO;
 import com.qun.pojo.entity.Order;
 import com.qun.mapper.OrderMapper;
+import com.qun.pojo.vo.CartShowVO;
 import com.qun.service.OrderService;
+import com.qun.util.JwtUtils;
+import com.qun.util.ShiroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -28,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ComputerMapper computerMapper;
+
 
     @Override
     public List<Order> getAll(int start,int num,String query) {
@@ -81,6 +85,17 @@ public class OrderServiceImpl implements OrderService {
         return Result.success(result);// 这个结果是一个表单，返回给浏览器填写，并且系统立即提交，才出来二维码
     }
 
+    @Override
+    public Result getAllOrder(String query, int start, int size) {
+        List<Order> all = getAll(start, size, "".equals(query)?null:query);
+        int total = getTotal("".equals(query)?null:query);
+
+        Map<Object, Object> map = MapUtil.builder()
+                .put("orders", all)
+                .put("total", total)
+                .map();
+        return Result.success(map);
+    }
 
     private String payOrder(String out_trade_no,Double total_amount,String subject,String body) {
         try {
@@ -106,5 +121,22 @@ public class OrderServiceImpl implements OrderService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void setPay(String id) {
+        Order order = new Order();
+        order.setId(Long.valueOf(id)).setPay(1);
+        update(order);
+    }
+
+    @Override
+    public Result getCart() {
+
+        Long id = ShiroUtil.getProfile().getId();
+
+        List<CartShowVO> cartOrder = orderMapper.getCartOrder(id);
+
+        return Result.success(cartOrder);
     }
 }

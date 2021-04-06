@@ -43,4 +43,8 @@
             </if>
         </where>
     </select>
+
+    <select id="getCartOrder" resultType="CartShowVO">
+        select c.url,o.count FROM `order` o INNER JOIN `computer` c ON o.`good_id` = c.`id` WHERE o.user_id = #{id} ORDER BY o.time DESC LIMIT 0,10
+    </select>
 </mapper>

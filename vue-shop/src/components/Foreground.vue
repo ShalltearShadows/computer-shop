@@ -16,7 +16,7 @@
             <el-dropdown>
               <span class="el-dropdown-link">
                 <el-badge style="margin-right: 20px; height: 16px" :hidden="count===0?true:false" :value="count" class="item">
-                  <el-link class="el-link-icon" icon="el-icon-shopping-cart-1" :underline="false" href="#"></el-link>
+                  <el-link class="el-link-icon" icon="el-icon-shopping-cart-1" :underline="false" href="/order/list"></el-link>
                 </el-badge>
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -28,6 +28,10 @@
                           <i class="el-icon-picture-outline"></i>
                         </div>
                       </el-image>
+                      X <div style="display: inline-block;">{{item.count}}</div>
+                    </el-col>
+                    <el-col>
+
                     </el-col>
                   </el-row>
                 </el-dropdown-item>
@@ -147,6 +151,7 @@ export default {
   },
   created() {
     this.avatar = window.localStorage.getItem('avatar')
+    this.getCart()
   },
   methods: {
     getFML() {
@@ -232,9 +237,13 @@ export default {
       this.$nextTick(() => {
         console.log(this.$refs.alipayWap.children[0].submit())
       })
-
+    },
+    async getCart(){
+      const {data:res} = await this.$http.get("/order/getCart");
+      this.cart = res.data;
+      console.log(res.data.length)
+      this.count = res.data.length
     }
-
   },
 
 }
