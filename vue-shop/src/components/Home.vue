@@ -84,8 +84,8 @@ export default {
   methods: {
     quit() {
       //删除token
-      window.localStorage.removeItem('token');
-      window.localStorage.removeItem('avatar');
+      window.sessionStorage.removeItem('token');
+      window.sessionStorage.removeItem('avatar');
       this.$store.commit("REMOVE_INFO")
       //跳转到登录页
       this.$router.push('/foreground')
@@ -102,7 +102,7 @@ export default {
     getAvatar() {
       this.$http.get('/user/avatar').then(res => {
         var avatar = "data:image/png;base64," + res.data.data
-        window.localStorage.setItem("avatar", avatar)
+        window.sessionStorage.setItem("avatar", avatar)
         this.avatar = avatar
       })
     },

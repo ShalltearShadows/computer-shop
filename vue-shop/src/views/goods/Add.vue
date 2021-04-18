@@ -116,7 +116,7 @@ export default {
       uploadURL: 'http://localhost:8080/good/upload',
       // 图片上传组件的请求对象
       headerObj: {
-        Authorization: window.localStorage.getItem('token')
+        Authorization: window.sessionStorage.getItem('token')
       },
       //上传成功后的地址
       imageUrl: null,

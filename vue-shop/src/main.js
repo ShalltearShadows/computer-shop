@@ -29,7 +29,7 @@ Axios.interceptors.request.use (config =>{
     //开启进度条
     NProgress.start();
     //为请求头对象，添加Token验证的Authorization字段
-    var token = window.localStorage.getItem ('token');
+    var token = window.sessionStorage.getItem ('token');
     config.headers.Authorization = token==null?"":token;
 
     return config

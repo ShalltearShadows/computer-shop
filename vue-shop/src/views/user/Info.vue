@@ -121,7 +121,7 @@ export default {
       uploadURL: 'http://localhost:8080/user/upload',
       imageUrl: '',
       headerObj: {
-        Authorization: window.localStorage.getItem('token')
+        Authorization: window.sessionStorage.getItem('token')
       },
     }
   },
@@ -129,7 +129,7 @@ export default {
     this.getInfo()
     this.passwordForm.id = this.infoForm.id
 
-    this.imageUrl = window.localStorage.getItem('avatar')
+    this.imageUrl = window.sessionStorage.getItem('avatar')
   },
   methods:{
     async getInfo(){
@@ -172,7 +172,7 @@ export default {
       }
 
       var avatar = "data:image/png;base64," + response.data
-      window.localStorage.setItem("avatar", avatar)
+      window.sessionStorage.setItem("avatar", avatar)
       this.imageUrl = avatar
 
       this.avatarDialogVisible = false

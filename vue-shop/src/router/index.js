@@ -70,7 +70,7 @@ router.beforeEach((to, from, next) => {
     }
 
     //从sessionstorage中获取到保存的token值
-    const tokenstr = window.localStorage.getItem('token');
+    const tokenstr = window.sessionStorage.getItem('token');
     //没有token，强制跳转到登录页
     if (!tokenstr) {
         return next('/login');

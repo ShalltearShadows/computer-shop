@@ -111,7 +111,7 @@ export default {
 
           this.$message.success("登陆成功")
           //将服务器返回的token存储到sessionStorage
-          window.localStorage.setItem("token", res.headers.authorization)
+          window.sessionStorage.setItem("token", res.headers.authorization)
 
           this.$store.commit("SET_TOKEN", res.headers.authorization)
           this.$store.commit("SET_USERINFO", res.data.data)
@@ -125,7 +125,7 @@ export default {
       const {data:res} = await this.$http.get('/user/avatar')
 
       var avatar = "data:image/png;base64," + res.data
-      window.localStorage.setItem("avatar", avatar)
+      window.sessionStorage.setItem("avatar", avatar)
 
       // 通过编程式导航跳转到前台主页
       this.$router.push('/foreground')
@@ -143,7 +143,7 @@ export default {
           }
           this.$message.success("登陆成功")
           //将服务器返回的token存储到sessionStorage
-          window.localStorage.setItem("token", res.headers.authorization)
+          window.sessionStorage.setItem("token", res.headers.authorization)
 
           this.$store.commit("SET_TOKEN", res.headers.authorization)
           this.$store.commit("SET_USERINFO", res.data.data)

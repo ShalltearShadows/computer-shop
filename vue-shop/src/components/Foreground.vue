@@ -150,8 +150,11 @@ export default {
     }
   },
   created() {
-    this.avatar = window.localStorage.getItem('avatar')
-    this.getCart()
+    this.avatar = window.sessionStorage.getItem('avatar')
+    var token = window.sessionStorage.getItem('token')
+    if (token!==null&&token.length>1){
+      this.getCart()
+    }
   },
   methods: {
     getFML() {
@@ -206,8 +209,8 @@ export default {
     },
     quit() {
       //删除token
-      window.localStorage.removeItem('token');
-      window.localStorage.removeItem('avatar');
+      window.sessionStorage.removeItem('token');
+      window.sessionStorage.removeItem('avatar');
       this.$store.commit("REMOVE_INFO")
       this.avatar = null
     },

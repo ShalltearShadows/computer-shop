@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -132,6 +133,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Result getCart() {
+
+        if (Objects.isNull(ShiroUtil.getProfile())){
+            return Result.fail("请登录");
+        }
 
         Long id = ShiroUtil.getProfile().getId();
 
