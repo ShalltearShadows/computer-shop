@@ -22,7 +22,7 @@ public interface ComputerService {
 
     List<ForegroundMainListVO> getFFL(int start);
 
-    int getTotal();
+    int getTotal(int start,int num, String query);
 
     Computer get(long id);
 

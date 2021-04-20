@@ -23,7 +23,7 @@ public interface ComputerMapper {
 
     List<ForegroundMainListVO> getFFL(int start);
 
-    int getTotal();
+    int getTotal(@Param("start") int start, @Param("num") int num, @Param("query") String query);
 
     Computer get(long id);
 

@@ -34,7 +34,7 @@ public class GoodController {
     public Result getAll(@RequestParam("query") String query,@RequestParam("pagesize") int size,@RequestParam("pagenum") int num){
 
         List<Computer> all = computerService.getAll((num-1)*size, size, query);
-        int total = computerService.getTotal();
+        int total = computerService.getTotal((num-1)*size, size, query);
 
         return Result.success(new GoodVO().setGoods(all).setTotal(total));
     }

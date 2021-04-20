@@ -40,8 +40,8 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
-    public int getTotal() {
-        return computerMapper.getTotal();
+    public int getTotal(int start, int num, String query) {
+        return computerMapper.getTotal(start,num,query);
     }
 
     @Override
