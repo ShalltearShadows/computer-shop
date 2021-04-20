@@ -16,6 +16,18 @@
         limit #{start},#{num}
     </select>
 
+    <select id="getPersonOrder" resultType="Order">
+        select * from `order`
+        <where>
+            user_id = #{id}
+            <if test="query != null">
+                id like concat('%',#{query},'%') or
+                good_id like concat('%',#{query},'%')
+            </if>
+        </where>
+        limit #{start},#{num}
+    </select>
+
     <select id="get" resultType="Order">
         select * from `order` where id = #{id}
     </select>
@@ -44,7 +56,18 @@
         </where>
     </select>
 
+    <select id="getPersonOrderTotal" resultType="int">
+        select count(*) from `order`
+        <where>
+            user_id = #{id}
+            <if test="query != null">
+                id like concat('%',#{query},'%') or
+                good_id like concat('%',#{query},'%')
+            </if>
+        </where>
+    </select>
+
     <select id="getCartOrder" resultType="CartShowVO">
-        select c.url,o.count FROM `order` o INNER JOIN `computer` c ON o.`good_id` = c.`id` WHERE o.user_id = #{id} ORDER BY o.time DESC LIMIT 0,10
+        select c.url,o.count FROM `order` o INNER JOIN `computer` c ON o.`good_id`=c.`id` WHERE o.user_id=#{id} and o.`pay`=0 ORDER BY o.time DESC
     </select>
 </mapper>

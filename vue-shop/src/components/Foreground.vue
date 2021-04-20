@@ -197,7 +197,9 @@ export default {
       var order = {goodId:good.goodId,count:this.inputCount,time: new Date(),total:total,url: good.url}
 
       this.$http.post("/order/add",order)
-
+      if (this.cart===10){
+        this.cart.slice(0,1)
+      }
       this.cart.push(order)
       this.count = this.cart.length
       this.infoDialogVisible = false

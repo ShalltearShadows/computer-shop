@@ -50,7 +50,7 @@ Axios.interceptors.response.use (response => {
     NProgress.done();
     // 处理的是全局异常类返回的错误
     console.log("=====================error======================")
-    console.log(error.response.data.msg)
+    console.log(error.response)
     console.log(error.response.config.url)
     console.log("================================================")
 

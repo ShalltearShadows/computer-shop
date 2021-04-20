@@ -17,6 +17,7 @@ import com.qun.service.UserService;
 import com.qun.util.ImageUtil;
 import com.qun.util.JwtUtils;
 import com.qun.util.ShiroUtil;
+import org.apache.shiro.ShiroException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -100,16 +101,16 @@ public class UserServiceImpl implements UserService {
 
         User user = get(loginVO.getId());
         Assert.notNull(user,"用户不存在");
+        Assert.isTrue(user.getPassword().equals(loginVO.getPassword()),"密码不正确");
+        Assert.isTrue(!(user.getStatus()==0),"该用户已禁用");
 
-        if (!user.getPassword().equals(loginVO.getPassword())){
-            return Result.fail("密码不正确");
-        }
 
         String jwt = jwtUtils.generateToken(loginVO.getId());
 
         response.setHeader("Authorization",jwt);
         response.setHeader("Access-Control-Expose-Headers","Authorization");
 
+        System.out.println(user.getId()+"已登录");
 
         return Result.success(MapUtil.builder()
                 .put("id",user.getId())

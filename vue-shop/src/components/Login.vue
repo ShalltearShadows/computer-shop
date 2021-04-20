@@ -108,8 +108,10 @@ export default {
         }
 
         this.$http.post('/login', this.loginForm).then(res => {
-
-          this.$message.success("登陆成功")
+          console.log("res"+res)
+          if (res.data.code!==200){
+            return
+          }
           //将服务器返回的token存储到sessionStorage
           window.sessionStorage.setItem("token", res.headers.authorization)
 
@@ -127,8 +129,8 @@ export default {
       var avatar = "data:image/png;base64," + res.data
       window.sessionStorage.setItem("avatar", avatar)
 
-      // 通过编程式导航跳转到前台主页
-      this.$router.push('/foreground')
+        // 通过编程式导航跳转到前台主页
+        this.$router.push('/foreground')
     },
     async register(){
       this.$refs.registerFormRef.validate(async valid => {
@@ -136,12 +138,10 @@ export default {
           return;
         }
         const {data:res} = await this.$http.post('user/register',this.registerForm).then(res => {
-
           if (res.data.code!==200){
-            this.$message.error("登录失败")
+            this.$message.error("注册失败")
             return
           }
-          this.$message.success("登陆成功")
           //将服务器返回的token存储到sessionStorage
           window.sessionStorage.setItem("token", res.headers.authorization)
 

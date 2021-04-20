@@ -103,13 +103,11 @@ public class AccountRealm extends AuthorizingRealm {
             throw new ShiroException("账户不存在！");
         }
         if (user.getStatus() == 0){
-            System.out.println("ID:"+id+"已禁用！"+"喵喵喵~~~~");
             throw new ShiroException("该用户已禁用");
         }
 
         AccountProfile profile = new AccountProfile();
         BeanUtil.copyProperties(user,profile);
-        System.out.println("认证======>"+profile);
 
         //profile 为安全数据，getCredentials：获取token
         return new SimpleAuthenticationInfo(profile,jwtToken.getCredentials(),getName());

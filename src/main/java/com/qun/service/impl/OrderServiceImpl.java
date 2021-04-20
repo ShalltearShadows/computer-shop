@@ -9,12 +9,15 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.qun.common.lang.Result;
 import com.qun.config.AlipayConfig;
 import com.qun.mapper.ComputerMapper;
+import com.qun.mapper.UserMapper;
 import com.qun.pojo.entity.Computer;
+import com.qun.pojo.entity.User;
 import com.qun.pojo.vo.CartOrderVO;
 import com.qun.pojo.entity.Order;
 import com.qun.mapper.OrderMapper;
 import com.qun.pojo.vo.CartShowVO;
 import com.qun.service.OrderService;
+import com.qun.shiro.AccountProfile;
 import com.qun.util.JwtUtils;
 import com.qun.util.ShiroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ComputerMapper computerMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Override
@@ -88,8 +94,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Result getAllOrder(String query, int start, int size) {
-        List<Order> all = getAll(start, size, "".equals(query)?null:query);
-        int total = getTotal("".equals(query)?null:query);
+        AccountProfile profile = ShiroUtil.getProfile();
+        if (Objects.isNull(profile)){
+            return Result.fail("请登录！！！");
+        }
+
+        Long id = profile.getId();
+        List<Order> all;
+        int total;
+        User user = userMapper.get(id);
+        if (user.getRole()==1){
+            all = getAll(start, size, "".equals(query)?null:query);
+            total = getTotal("".equals(query)?null:query);
+        }else {
+            all = orderMapper.getPersonOrder(start, size, "".equals(query)?null:query,id);
+            total = orderMapper.getPersonOrderTotal("".equals(query)?null:query);
+        }
+
 
         Map<Object, Object> map = MapUtil.builder()
                 .put("orders", all)

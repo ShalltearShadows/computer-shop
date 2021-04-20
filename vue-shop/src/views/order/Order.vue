@@ -11,7 +11,7 @@
     <el-card>
       <el-row>
         <el-col :span="6">
-          <el-input placeholder="请输入内容" v-model="queryInfo.query">
+          <el-input placeholder="请输入内容" clearable v-model="queryInfo.query">
             <el-button slot="append" icon="el-icon-search" @click="getOrderList"></el-button>
           </el-input>
         </el-col>
@@ -67,7 +67,7 @@ export default {
       queryInfo: {
         query: '',
         pagenum: 1,
-        pagesize: 5
+        pagesize: 10
       },
       pageTotal: 0,
       // 订单列表

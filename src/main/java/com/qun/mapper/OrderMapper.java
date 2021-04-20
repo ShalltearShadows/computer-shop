@@ -25,4 +25,6 @@ public interface OrderMapper {
     int update(Order order);
     int getTotal(String query);
     List<CartShowVO> getCartOrder(Long id);
+    List<Order> getPersonOrder(int start,int num,String query,long id);
+    int getPersonOrderTotal(String query);
 }
