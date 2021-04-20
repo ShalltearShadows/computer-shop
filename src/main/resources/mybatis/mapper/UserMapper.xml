@@ -19,6 +19,14 @@
 
     <select id="getTotal" resultType="int">
         select count(*) from user
+        <where>
+            <if test="query != null">
+                id like concat('%',#{query},'%') or
+                username like concat('%',#{query},'%') or
+                mobile like concat('%',#{query},'%') or
+                address like concat('%',#{query},'%')
+            </if>
+        </where>
     </select>
 
     <select id="get" resultType="User">

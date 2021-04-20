@@ -46,6 +46,8 @@ Axios.interceptors.response.use (response => {
 
     return response
 },error => {
+    //关闭进度条
+    NProgress.done();
     // 处理的是全局异常类返回的错误
     console.log("=====================error======================")
     console.log(error.response.data.msg)

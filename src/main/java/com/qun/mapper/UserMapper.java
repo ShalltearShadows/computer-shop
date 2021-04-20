@@ -20,7 +20,7 @@ import java.util.List;
 public interface UserMapper {
     List<User> getAll(@Param("start") int start,@Param("num") int num,@Param("query") String query);
 
-    int getTotal();
+    int getTotal(@Param("start") int start,@Param("num") int num,@Param("query") String query);
 
     User get(@Param("id") long id);
 

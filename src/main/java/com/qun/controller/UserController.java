@@ -56,7 +56,7 @@ public class UserController {
         int start = (num-1)*size;
 
         List<User> all = userService.getAll(start, size, "".equals(query)?null:query);
-        int total = userService.getTotal();
+        int total = userService.getTotal(start, size, "".equals(query)?null:query);
 
         return Result.success(new UserListVO().setUsers(all).setTotal(total));
     }

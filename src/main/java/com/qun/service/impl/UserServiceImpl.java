@@ -47,8 +47,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getTotal() {
-        return userMapper.getTotal();
+    public int getTotal(int start,int num,String query) {
+        return userMapper.getTotal(start,num,query);
     }
 
     @Override

@@ -22,7 +22,7 @@ public interface UserService {
 
     List<User> getAll(int start,int num,String query);
 
-    int getTotal();
+    int getTotal(int start,int num,String query);
 
     User get(long id);
 
