@@ -7,6 +7,7 @@
  */
 package com.qun.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.qun.pojo.vo.PermVO;
 import com.qun.pojo.vo.RoleVO;
 import com.qun.pojo.entity.Permission;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class PermissionServiceImpl implements PermissionService {
@@ -35,45 +38,40 @@ public class PermissionServiceImpl implements PermissionService {
     public List<PermVO> getOrderPermission() {
 
         List<Permission> all = getAll();
-
-        return structuredPerm(all);
+        List<PermVO> permVOS = structuredPerm(all);
+        permVOS.remove(4);
+        return permVOS;
     }
 
     /**
      * 结构化权限
      */
     private List<PermVO> structuredPerm(List<Permission> all) {
-        List<PermVO> perm2 = new ArrayList<>();
-        List<PermVO> perm1 = new ArrayList<>();
+        Map<Integer, List<PermVO>> collect = all.stream().map(permission -> {
+            PermVO vo = new PermVO();
+            BeanUtil.copyProperties(permission,vo);
+            return vo;
+        }).collect(Collectors.groupingBy(PermVO::getLevel));
 
-        for (Permission m : all) {
-            if (m.getLevel()==2){
-                perm2.add(new PermVO(m.getPermId(),m.getParentId(),m.getName()));
-            }
+        if (collect.get(3)!=null) {
+            collect.get(2).stream().peek(perm -> {
+                for (PermVO p3 : collect.get(3)) {
+                    if (p3.getParentId() == perm.getPermId()) {
+                        perm.setChildren(p3);
+                    }
+                }
+            }).collect(Collectors.toList());
         }
 
-        for (PermVO e : perm2) {
-            for (Permission n : all) {
-                if (n.getParentId()==e.getId()){
-                    e.setChildren(new PermVO(n.getPermId(),n.getParentId(),n.getName()));
+        collect.get(1).stream().peek(perm -> {
+            for (PermVO p : collect.get(2)) {
+                if (p.getParentId() == perm.getPermId()) {
+                    perm.setChildren(p);
                 }
             }
-        }
+        }).collect(Collectors.toList());
 
-        for (Permission m : all) {
-            if (m.getLevel()==1){
-                perm1.add(new PermVO(m.getPermId(),m.getParentId(),m.getName()));
-            }
-        }
-
-        for (PermVO p2 : perm2) {
-            for (PermVO p1 : perm1) {
-                if (p1.getId()==p2.getParentId()){
-                    p1.setChildren(p2);
-                }
-            }
-        }
-        return perm1;
+        return collect.get(1);
     }
 
     @Override
@@ -140,11 +138,9 @@ public class PermissionServiceImpl implements PermissionService {
      */
     @Override
     public void getRoleAndPerm(List<RoleVO> roleVOS) {
-        for (RoleVO dto : roleVOS) {
-            List<Permission> list = permissionMapper.get(dto.getPerm());
-
-            List<PermVO> permVOS = structuredPerm(list);
-            dto.setChildren(permVOS);
+        for (RoleVO role : roleVOS) {
+            List<Permission> list = permissionMapper.get(role.getPerm());
+            role.setPermission(structuredPerm(list));
         }
     }
 

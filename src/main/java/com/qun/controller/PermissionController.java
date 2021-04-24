@@ -16,9 +16,11 @@ import com.qun.service.PermissionService;
 import com.qun.service.RoleService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/perm")
@@ -33,13 +35,9 @@ public class PermissionController {
     @GetMapping("/role")
     @RequiresPermissions("perm:role")
     public Result role(){
-
+        // 获取未设置权限的角色
         List<RoleVO> roleVOS = roleService.getAll();
-        for (RoleVO roleVO : roleVOS) {
-            int[] ids = roleService.getPermsByRoleId(roleVO.getId());
-            roleVO.setPerm(ids);
-        }
-
+        // 给角色设置权限
         permissionService.getRoleAndPerm(roleVOS);
 
         return Result.success(roleVOS);
@@ -48,46 +46,70 @@ public class PermissionController {
     @PostMapping("/delperm")
     @RequiresPermissions("perm:role:delperm")
     public Result deltePerm(@RequestBody DeletePermVO delete){
-        Result role = role();
-        List<RoleVO> data = (List<RoleVO>) role.getData();
-        RoleVO dto = null;
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getId()==delete.getRoleId()) {
-                dto = data.get(i);
-                break;
-            }
+
+        if (delete.getRoleId()==1){
+            return Result.fail("无权修改超级管理员权限");
         }
 
-        int flag = roleService.deletePerms(delete.getRoleId(), delete.getPermId(), dto.getChildren());
+        int p = delete.getPermId();
+        switch (p){
+            case 5:
+            case 29:
+            case 30:
+            case 31:
+            case 32: return Result.fail("个人基本权限无法删除");
+        }
 
-        return flag==1?Result.success(dto.getChildren()):Result.fail("删除失败");
+        Result role = role();
+        List<RoleVO> data = (List<RoleVO>) role.getData();
+        Optional<RoleVO> first = data.stream().filter(roleVO -> roleVO.getId() == delete.getRoleId()).findFirst();
+
+        first.ifPresent(roleVO -> roleService.deletePerms(delete.getRoleId(), delete.getPermId(), roleVO.getPermission()));
+
+        List<RoleVO> list = (List<RoleVO>) role().getData();
+        Optional<RoleVO> second = list.stream().filter(roleVO -> roleVO.getId() == delete.getRoleId()).findFirst();
+
+        return second.map(roleVO -> Result.success(roleVO.getPermission())).orElseGet(Result::success);
+
     }
 
 
     @PostMapping("/alname")
     public Result alname(@RequestBody AlterRoleNameVO nameDTO){
-        int flag = roleService.alterName(nameDTO.getRoleId(), nameDTO.getRoleName());
-        return flag==1?Result.success("修改成功"):Result.fail("修改失败");
+        if (nameDTO.getRoleId()==1){
+            return Result.fail("无权修改超级管理员");
+        }
+        roleService.alterName(nameDTO.getRoleId(), nameDTO.getRoleName());
+        return Result.success();
     }
 
     @PostMapping("/delrole")
     public Result delete(@RequestBody RoleVO roleVO){
-        int flag = roleService.deleteRole(roleVO.getId());
-        return flag==1?Result.success("删除成功"):Result.fail("删除失败");
+        if (roleVO.getId()==1){
+            return Result.fail("无权删除超级管理员");
+        }
+        roleService.deleteRole(roleVO.getId());
+        return Result.success();
     }
 
 
     @GetMapping("/list")
     public Result getAllPerm(){
         List<PermVO> list = permissionService.getOrderPermission();
-
         return Result.success(list);
     }
 
     @PostMapping("/assign")
     public Result assign(@RequestBody IdStrVO idStr){
-        int flag = roleService.alterPerms(idStr.getRid(), idStr.getIds());
-        return flag==1?Result.success("修改成功"):Result.fail("修改失败");
+        if (idStr.getRid()==1){
+            return Result.fail("无权修改超级管理员权限");
+        }
+        if (StringUtils.hasLength(idStr.getIds())){
+            roleService.alterPerms(idStr.getRid(), idStr.getIds()+",5,29,30,31,32");
+        }else {
+            roleService.alterPerms(idStr.getRid(), "5,29,30,31,32");
+        }
+        return Result.success();
     }
 
     @GetMapping("/allperms")
@@ -98,7 +120,7 @@ public class PermissionController {
 
     @PostMapping("/add")
     public Result addRole(@RequestBody Role role){
-        int flag = roleService.addRole(role.getName());
-        return flag==1?Result.success("添加成功"):Result.fail("添加失败");
+        roleService.addRole(role.getName());
+        return Result.success();
     }
 }

@@ -20,9 +20,7 @@ public interface RoleService {
 
     int[] getPerms(Long id);
 
-    int[] getPermsByRoleId(int id);
-
-    int deletePerms(int rid, int pid, List<PermVO> permsDTO);
+    void deletePerms(int rid, int pid, List<PermVO> permsDTO);
 
     int alterName(int rid,String name);
 

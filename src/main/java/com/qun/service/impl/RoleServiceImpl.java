@@ -9,6 +9,7 @@ package com.qun.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.druid.util.StringUtils;
+import com.qun.mapper.PermissionMapper;
 import com.qun.pojo.vo.PermVO;
 import com.qun.pojo.vo.RoleVO;
 import com.qun.pojo.entity.Role;
@@ -18,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.shiro.util.StringUtils.split;
 
@@ -28,6 +31,9 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMapper roleMapper;
 
+    @Autowired
+    private PermissionMapper permissionMapper;
+
     @Override
     public List<RoleVO> getAll() {
         List<Role> all = roleMapper.getAll();
@@ -35,6 +41,15 @@ public class RoleServiceImpl implements RoleService {
         for (int i = 0; i < all.size(); i++) {
             roles.add(new RoleVO());
             BeanUtil.copyProperties(all.get(i),roles.get(i));
+            if (all.get(i).getPerms().length()==0) continue;
+            String[] split = all.get(i).getPerms().split(",");
+
+            int[] perms = new int[split.length];
+
+            for (int j = 0; j < perms.length; j++) {
+                perms[j] = Integer.parseInt(split[j]);
+            }
+            roles.get(i).setPerm(perms);
         }
 
         return roles;
@@ -56,75 +71,31 @@ public class RoleServiceImpl implements RoleService {
         return perms;
     }
 
-    public int[] getPermsByRoleId(int id){
-        String permsByRoleId = roleMapper.getPermsByRoleId(id);
-        if (StringUtils.isEmpty(permsByRoleId)){
-            return null;
-        }
-        String[] split = permsByRoleId.split(",");
-        int[] perms = new int[split.length];
-        for (int i = 0; i < perms.length; i++) {
-            perms[i] = Integer.parseInt(split[i]);
-        }
-
-        return perms;
-    }
 
     @Override
-    public int deletePerms(int rid,int pid,List<PermVO> permsDTO) {
-        if (permsDTO==null){
-            permsDTO = new ArrayList<>();
-        }
-        flag:for (int i = 0; i < permsDTO.size(); i++) {
-            if (permsDTO.get(i).getId()==pid){
-                permsDTO.remove(i);
-                break flag;
-            }
-            List<PermVO> children = permsDTO.get(i).getChildren();
-            if (children==null){
-                continue;
-            }
-            for (int j = 0; j < children.size(); j++) {
-                if (children.get(j).getId()==pid){
-                    children.remove(j);
-                    break flag;
-                }
-                List<PermVO> list = children.get(j).getChildren();
-                if (list==null){
-                    continue;
-                }
-                for (int k = 0; k < list.size(); k++) {
-                    if (list.get(k).getId()==pid){
-                        list.remove(k);
-                        break flag;
-                    }
-                }
-            }
-        }
+    public void deletePerms(int rid,int pid,List<PermVO> perms) {
+        PermVO root = new PermVO();
+        List<Integer> array = new ArrayList<>();
+        root.setPermId(-1);
+        root.setPerms(perms);
+        preorderDelete(root,pid,0,array);
+        array.remove(0);
+        String collect = array.stream().map(String::valueOf).collect(Collectors.joining(","));
+        roleMapper.deletePerms(rid,collect);
+    }
 
-        StringBuilder perm = new StringBuilder("");
+    private void preorderDelete(PermVO root,int pid,int yes,List<Integer> array){
 
-
-        for (PermVO permVO : permsDTO) {
-            perm.append(permVO.getId()).append(",");
-            if (permVO.getChildren()==null){
-                continue;
-            }
-            for (PermVO child : permVO.getChildren()) {
-                perm.append(child.getId()).append(",");
-                if (child.getChildren()==null){
-                    continue;
-                }
-                for (PermVO childChild : child.getChildren()) {
-                    perm.append(childChild.getId()).append(",");
-                }
-            }
+        if (root.getPermId()==pid){
+            yes = 1;
         }
-        if (perm.length()>0){
-            perm.deleteCharAt(perm.length()-1);
+        if (yes == 0){
+            array.add(root.getPermId());
         }
-
-        return roleMapper.deletePerms(rid,perm.toString());
+        if (root.getChildren()==null) return;
+        for (PermVO child : root.getChildren()) {
+            preorderDelete(child,pid,yes,array);
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@
     </delete>
 
     <update id="alterPerms">
-        update pe_role set perms = #{ids} where id = #{id}
+        update pe_role set perms = #{ids} where id = #{rid}
     </update>
 
     <update id="deletePerms">

@@ -14,4 +14,8 @@
         </foreach>
     </select>
 
+    <select id="getLevel">
+        select level from pe_permission where perm_id = #{pid}
+    </select>
+
 </mapper>

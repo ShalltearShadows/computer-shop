@@ -21,4 +21,6 @@ public interface PermissionMapper {
 
     List<Permission> get(@Param("ids") int[] ids);
 
+    int getLevel(int pid);
+
 }

@@ -17,5 +17,5 @@ public class RoleVO {
     private String name;
     private int[] perm;
 
-    private List<PermVO> children;
+    private List<PermVO> permission;
 }
