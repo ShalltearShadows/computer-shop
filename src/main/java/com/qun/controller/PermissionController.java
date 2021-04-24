@@ -48,7 +48,7 @@ public class PermissionController {
     public Result deltePerm(@RequestBody DeletePermVO delete){
 
         if (delete.getRoleId()==1){
-            return Result.fail("无权修改超级管理员权限");
+            return Result.fail("无权删除超级管理员权限");
         }
 
         int p = delete.getPermId();
@@ -75,6 +75,7 @@ public class PermissionController {
 
 
     @PostMapping("/alname")
+    @RequiresPermissions("perm:role:edit")
     public Result alname(@RequestBody AlterRoleNameVO nameDTO){
         if (nameDTO.getRoleId()==1){
             return Result.fail("无权修改超级管理员");
@@ -84,6 +85,7 @@ public class PermissionController {
     }
 
     @PostMapping("/delrole")
+    @RequiresPermissions("perm:role:delete")
     public Result delete(@RequestBody RoleVO roleVO){
         if (roleVO.getId()==1){
             return Result.fail("无权删除超级管理员");
@@ -100,6 +102,7 @@ public class PermissionController {
     }
 
     @PostMapping("/assign")
+    @RequiresPermissions("perm:role:assign")
     public Result assign(@RequestBody IdStrVO idStr){
         if (idStr.getRid()==1){
             return Result.fail("无权修改超级管理员权限");
@@ -119,6 +122,7 @@ public class PermissionController {
     }
 
     @PostMapping("/add")
+    @RequiresPermissions("perm:role:add")
     public Result addRole(@RequestBody Role role){
         roleService.addRole(role.getName());
         return Result.success();

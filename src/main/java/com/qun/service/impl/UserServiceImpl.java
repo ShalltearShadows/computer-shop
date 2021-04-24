@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
         User user = get(loginVO.getId());
         Assert.notNull(user,"用户不存在");
         Assert.isTrue(user.getPassword().equals(loginVO.getPassword()),"密码不正确");
-        Assert.isTrue(!(user.getStatus()==0),"该用户已禁用");
+        Assert.isTrue(user.getStatus(),"该用户已禁用");
 
 
         String jwt = jwtUtils.generateToken(loginVO.getId());

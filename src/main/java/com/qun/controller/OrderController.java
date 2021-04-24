@@ -8,6 +8,7 @@ import com.qun.pojo.vo.CartOrderVO;
 import com.qun.service.OrderService;
 import com.qun.util.ShiroUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/add")
+    @RequiresPermissions("order:list:add")
     public Result addCart(@RequestBody CartOrderVO cartOrderVO){
         cartOrderVO.setUserId(ShiroUtil.getProfile().getId());
         orderService.add(cartOrderVO);
@@ -31,17 +33,20 @@ public class OrderController {
     }
 
     @GetMapping("/all")
+    @RequiresPermissions("order:list:query")
     public Result getAllOrder(@RequestParam("query") String query,@RequestParam("pagesize") int size,@RequestParam("pagenum") int num){
         return orderService.getAllOrder("".equals(query)?null:query,(num-1)*size,size);
     }
 
     @DeleteMapping("/delete/{id}")
+    @RequiresPermissions("order:list:delete")
     public Result deleteOrder(@PathVariable("id") Long id){
         orderService.delete(id);
         return Result.success("success");
     }
 
     @PostMapping("/pay")
+    @RequiresPermissions("order:list:pay")
     public Result pay(@RequestBody CartOrderVO orderVO){
         return orderService.pay(orderVO);
     }

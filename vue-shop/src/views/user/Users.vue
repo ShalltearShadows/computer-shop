@@ -40,7 +40,7 @@
         <el-table-column label="地址" prop="address"></el-table-column>
         <el-table-column label="状态" prop="status">
           <template v-slot="scope">
-            <el-switch v-model="scope.row.status===1" @change="userStateChanged(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.status" @change="userStateChanged(scope.row)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作">
@@ -247,13 +247,12 @@ export default {
     },
     // 监听状态开关的改变
     async userStateChanged(userInfo) {
-      // const {data: res} = await this.$http.put(`users/${userInfo.id}/state/${userInfo.mg_state}`)
-      // if (res.meta.status !== 200) {
-      //     userInfo.mg_state = !userInfo.mg_state;
-      //     return this.$message.error("更新用户失败");
-      // }
-      //
-      // this.$message.success("更新用户状态成功");
+      const {data: res} = await this.$http.post('user/ban',{id:userInfo.id,status:userInfo.status})
+      if (res.code !== 200) {
+          userInfo.status = !userInfo.status;
+          return this.$message.error(res.msg);
+      }
+
     },
     //验证邮箱规则
     checkEmail(rule, value, cb) {
@@ -304,7 +303,7 @@ export default {
       const {data: res} = await this.$http.get('user/edit/' + id)
 
       if (res.code !== 200) {
-        return this.$message.error('查询用户失败！');
+        return this.$message.error('获取用户信息失败！')
       }
 
       this.editForm = res.data;

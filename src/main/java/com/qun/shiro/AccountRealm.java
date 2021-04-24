@@ -102,7 +102,7 @@ public class AccountRealm extends AuthorizingRealm {
         if (user == null){
             throw new ShiroException("账户不存在！");
         }
-        if (user.getStatus() == 0){
+        if (!user.getStatus()){
             throw new ShiroException("该用户已禁用");
         }
 

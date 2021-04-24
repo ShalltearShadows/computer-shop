@@ -13,6 +13,7 @@ import com.qun.pojo.vo.GoodVO;
 import com.qun.pojo.entity.Computer;
 import com.qun.service.ComputerService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class GoodController {
     private ComputerService computerService;
 
     @GetMapping("/list")
+    @RequiresPermissions("good:list:query")
     public Result getAll(@RequestParam("query") String query,@RequestParam("pagesize") int size,@RequestParam("pagenum") int num){
 
         List<Computer> all = computerService.getAll((num-1)*size, size, query);
@@ -40,7 +42,7 @@ public class GoodController {
     }
 
     @PostMapping("/add")
-    @RequiresAuthentication
+    @RequiresPermissions("good:add")
     public Result add(@RequestBody Computer computer){
         computerService.add(computer);
         return Result.success();
@@ -53,12 +55,14 @@ public class GoodController {
 
 
     @PostMapping("/delete")
+    @RequiresPermissions("good:list:delete")
     public Result delete(@RequestBody Computer computer){
         computerService.delete(computer.getId());
         return Result.success("删除成功");
     }
 
     @PostMapping("/update")
+    @RequiresPermissions("good:list:edit")
     public Result update(@RequestBody Computer computer){
         computerService.update(computer);
         return Result.success();

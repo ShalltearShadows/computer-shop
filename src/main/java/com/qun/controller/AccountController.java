@@ -31,7 +31,7 @@ public class AccountController {
     @GetMapping("/logout")
     public Result logout(){
         SecurityUtils.getSubject().logout();
-        return Result.success(null);
+        return Result.success();
     }
 
 }

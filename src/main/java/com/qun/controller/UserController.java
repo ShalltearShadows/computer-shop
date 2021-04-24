@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    @RequiresPermissions("user:list")
+    @RequiresPermissions("user:list:query")
     public Result list(@RequestParam("query") String query,@RequestParam("pagesize") int size,@RequestParam("pagenum") int num){
         int start = (num-1)*size;
 
@@ -68,9 +68,12 @@ public class UserController {
         return Result.success();
     }
 
+    /**
+     * 获取将要修改的用户的信息
+     */
     @GetMapping("/edit/{id}")
     @RequiresPermissions("user:list:edit")
-    public Result edit(@PathVariable("id") Long id){
+    public Result getEditInfo(@PathVariable("id") Long id){
         UserVO user = userService.getUserVO(id);
         return Result.success(user);
     }
@@ -84,25 +87,22 @@ public class UserController {
         return Result.success();
     }
 
+    @PostMapping("/ban")
+    @RequiresPermissions("user:list:ban")
+    public Result ban(@RequestBody User user){
+        System.out.println(user);
+        User u = userService.get(user.getId());
+        if (u.getRole()==1){
+            return Result.fail("无权禁止超级管理员");
+        }
+        userService.update(user);
+        return Result.success();
+    }
+
     @PostMapping("/delete/{id}")
     @RequiresPermissions("user:list:delete")
     public Result delete(@NotNull @PathVariable("id") Long id){
         userService.delete(id);
-        return Result.success();
-    }
-
-
-    @GetMapping("/roles")
-    @RequiresPermissions("user:list:assign")
-    public Result roles(){
-        List<RoleVO> role = roleService.getAll();
-        return Result.success(role);
-    }
-
-    @PostMapping("/role/{id}")
-    @RequiresPermissions("user:list:role")
-    public Result role(@NotNull @PathVariable("id") Long id,@RequestBody RoleVO roleVO){
-        userService.updateRole(id, roleVO.getId());
         return Result.success();
     }
 
@@ -126,13 +126,13 @@ public class UserController {
     }
 
 
-    @GetMapping("/perm")
-    //@RequiresRoles("admin") //访问此方法必须拥有的角色
-    @RequiresPermissions("不可能会有的权限") //访问此方法必须具备的权限
-    public Result perm(){
-        System.err.println("你是超级管理员吗，不然的话，你是不可能会有这个方法的权限的");
-        return Result.success("你是超级管理员吗，不然的话，你是不可能会有这个方法的权限的");
-    }
+//    @GetMapping("/perm")
+//    @RequiresRoles("admin") //访问此方法必须拥有的角色
+//    @RequiresPermissions("不可能会有的权限") //访问此方法必须具备的权限
+//    public Result perm(){
+//        System.err.println("你是超级管理员吗，不然的话，你是不可能会有这个方法的权限的");
+//        return Result.success("你是超级管理员吗，不然的话，你是不可能会有这个方法的权限的");
+//    }
 
     /**
      * 上传头像
